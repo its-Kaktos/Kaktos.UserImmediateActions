@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{51C8C4B6-534A-4BD3-9F9D-D474B54A220D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E59BF380-2FC3-4CA2-B2CD-8827E20E3E8F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kaktos.UserImmediateActions", "src\Kaktos.UserImmediateActions\Kaktos.UserImmediateActions.csproj", "{651D5016-8D25-44DC-AFB6-A477B386F9FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaktos.UserImmediateActions.UnitTest", "tests\Kaktos.UserImmediateActions.UnitTest\Kaktos.UserImmediateActions.UnitTest.csproj", "{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{651D5016-8D25-44DC-AFB6-A477B386F9FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{651D5016-8D25-44DC-AFB6-A477B386F9FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{651D5016-8D25-44DC-AFB6-A477B386F9FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{651D5016-8D25-44DC-AFB6-A477B386F9FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{651D5016-8D25-44DC-AFB6-A477B386F9FE} = {E59BF380-2FC3-4CA2-B2CD-8827E20E3E8F}
+		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7} = {51C8C4B6-534A-4BD3-9F9D-D474B54A220D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B3F50280-D9A6-4898-A2DA-853CE6F1E8B2}
+	EndGlobalSection
+EndGlobal
