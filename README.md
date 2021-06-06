@@ -1,15 +1,15 @@
 <div dir="ltr">
 
-# A package to preform immediate log-out and refresh-signin on users.
+# A package to perform immediate log-out and refresh-sign-in on users.
 
-This project adds functionality on top of the asp.net core Identity package to support immediate log-out and refresh-signin.
+This project adds functionality on top of the asp.net core Identity package to support immediate log-out and refresh-sign-in.
 
 ### [برای دیدن داکیومنت فارسی اینجا رو کلیک کنید](#یک-پکیج-برای-انجام-عملیات-های-log-out-و-refresh-signin-به-صورت-آنی-بر-روی-کاربران)
 
 ## Use cases :
 
 To immediately remove/add a role or a claim from/to a user as an admin, you can first remove the roles you want using `UserMnager` and `RoleManager` classes and then use the refresh-sign in functionality to
-immediately update the user cookie. To sign-out a user from their account you can use the sign-out functionality to sign-out a user immediately from their account.
+immediately update the user cookie. To sign out a user from their account you can use the sign-out functionality to sign out a user immediately from their account.
 
 ## Quick access
 
@@ -56,7 +56,7 @@ app.UseUserImmediateActions();
 app.UseAuthorization();
 ```
 
-3. Now that we registered all the services and Middlewares that we need (that was quick!) its now time to use this package. The main service that you need to use
+3. Now that we registered all the services and Middlewares that we need (that was quick!) it's now time to use this package. The main service that you need to use
    is [`IUserImmediateActionsService`](#iuserimmediateactionsservice-).
 
 ```c#
@@ -71,7 +71,7 @@ public class MyController : Controller
 }
 ```
 
-Now get an instance of [`IUserImmediateActionsService`](#iuserimmediateactionsservice-) from the IoC container using the constructor injection (or any other method you want), and then use it to preform your desired
+Now get an instance of [`IUserImmediateActionsService`](#iuserimmediateactionsservice-) from the IoC container using the constructor injection (or any other method you want), and then use it to perform your desired
 action!
 
 ```c#
@@ -81,14 +81,14 @@ public async Task<IActionResult> EditUser(EditUser model)
     if (ModelState.IsValid)
     {
         /* 
-            First update the user, then use the method below for user immediate cookie update AKA refresh-signin.
+            First, update the user, then use the method below for user immediate cookie update AKA refresh-sign in.
         */
         await _userImmediateActionsService.RefreshCookieAsync(model.UserId);
 
         /* 
-            If for any reason you want to sign a user out from their account, use the mehtod below.
-            Also it is recommended to update the user SecurityStamp too so we can ensure a sign-out on
-            all devices, to update the user SecurityStamp, use the second method below.
+            If for any reason you want to sign a user out from their account, use the method below.
+            Also, it is recommended to update the user SecurityStamp too so we can ensure a sign-out on all devices,
+            to update the user SecurityStamp, use the second method below.
         */
         await _userImmediateActionsService.SignOutAsync(model.UserId);
         await _userManager.UpdateSecurityStampAsync(await _userManager.FindByIdAsync(model.UserId));
@@ -99,8 +99,8 @@ public async Task<IActionResult> EditUser(EditUser model)
 
 ```
 
-**Highlight :**
-Its recommended to read the [documentation](#documentation) as it contains useful information about how this package works.
+**Highlight:**
+Its recommended reading the [documentation](#documentation) as it contains useful information about how this package works.
 
 ## Documentation
 
@@ -108,13 +108,13 @@ Its recommended to read the [documentation](#documentation) as it contains usefu
 
 ( This part makes more sense if you have read the [services](#services) section first. )
 
-In this service there are two main methods `SignOut` and `RefreshCookie`, and also their Async version. Both of them will get an UserId as a parameter and will turn in into a
-unique key before storing it using the **main store service** along side some other information. In the Async methods the storing operation is done asynchronously (depends on the
+In this service, there are two main methods `SignOut` and `RefreshCookie`, and also their Async version. Both of them will get an UserId as a parameter and will turn it into a
+unique key before storing it using the **main store service** alongside some other information. In the Async methods the storing operation is done asynchronously (depends on the
 provided implementation of [`IImmediateActionsStore`](#iimmediateactionsstore-)).
 
-**Warning :**
-Make sure to update user SecurityStamp using `UpdateSecurityStampAsync` method from `UserManager` when calling the `SignOut` or `SingOutAsync`, to make sure the user will be
-singed-out from their account on all their devices. if SecurityStamp is not updated, there is a possibility that the user will not be signed-out on some devices.
+**Warning:**
+Make sure to update user SecurityStamp using the `UpdateSecurityStampAsync` method from `UserManager` when calling the `SignOut` or `SingOutAsync`, to make sure the user will be
+singed-out from their account on all their devices. if SecurityStamp is not updated, there is a possibility that the user will not be signed out on some devices.
 
 ## Services
 
@@ -125,8 +125,8 @@ This service is used internally to increase the testability of this package when
 ### `IImmediateActionsStore` :
 
 `IImmediateActionsStore` service is all about storing data. in this package we have two types of storage, first type is `IImmediateActionsStore` and we will call it the **main
-store service** in this documentation. The main pro of this service is its performance, it can save and specially read data pretty fast. for this reason this service will use some
-sort of caching mechanism to store data. By default this service will use
+store service** in this documentation. The main pro of this service is its performance, it can save and especially read data pretty fast. for this reason, this service will use some
+sort of caching mechanism to store data. By default, this service will use
 `IMemoryCache` for storing data, but you can change it to use `IDistributedCache` by using the [`AddDefaultDistributedImmediateActionStore`](#adddefaultdistributedimmediateactionstore-)
 extension method.
 
@@ -135,9 +135,9 @@ extension method.
 `IPermanentImmediateActionsStore` service is the second type of storage, and we will call it the **permanent store service**
 in this documentation. The main pro of this service is that it can save data permanently. We can use this server to avoid losing data on each application restart because of the use
 of caching services. Internally when the [**main store service**](#iimmediateactionsstore-)
-methods are called to store some data, the **permanent store service** methods are called to store the same exact data.
+methods are called to store some data, the **permanent store service** methods are called to store the same data.
 
-**Warning :**
+**Warning:**
 By default there is no real implementation of **permanent store service**, the added implementation of this service is fake and does nothing. To register a real working
 implementation of this service you need to use the [`AddPermanentImmediateActionsStore`](#--addpermanentimmediateactionsstore-)
 and pass your implementation to it.
@@ -153,7 +153,7 @@ and pass your implementation to it.
 ### `ICurrentUserWrapperService` :
 
 `ICurrentUserWrapperService` service is used internally in this package. it is used when a user needs to be singed-out
-or we need to refresh their cookie. By default the implementation of this service uses `UserManager` and `SignInManager`
+or we need to refresh their cookie. By default, the implementation of this service uses `UserManager` and `SignInManager`
 provided by the asp.net core Identity package to achieve its goals. to use your own implementation use
 [`AddCurrentUserWrapperService`](#addcurrentuserwrapperservice-) extension method and pass your implementation to it.
 
@@ -215,7 +215,7 @@ public static IdentityBuilder AddUserImmediateActionsService<TActionService>(thi
 
 ### `AddCurrentUserWrapperService` :
 
-Adds your implementation of [`ICurrentUserWrapperService`](#icurrentuserwrapperservice-) that contains the methods used to refresh and sign-out a user 
+Adds your implementation of [`ICurrentUserWrapperService`](#icurrentuserwrapperservice-) that contains the methods used to refresh and sign out a user 
 ( this service is used internally in this package ). ( Require inheritance from `ICurrentUserWrapperService` )
 
 ```c#
@@ -226,19 +226,17 @@ public static IdentityBuilder AddCurrentUserWrapperService<TUserWrapperService>(
 
 ( This part makes more sense if you have read the [services](#services) section first. )
 
-After calling on of the methods in [`IUserImmediateActionsService`](#iuserimmediateactionsservice-), the given userId will be used to generate a unique key using
+After calling one of the methods in [`IUserImmediateActionsService`](#iuserimmediateactionsservice-), the given userId will be used to generate a unique key using
 [`IUserActionStoreKeyGenerator`](#iuseractionstorekeygenerator-). After that an instance of `ImmediateActionDataModel` that contains the generated key and some
 other information will be stored in the [**main store**](#iimmediateactionsstore-) (and possibly the [**permanent store**](#ipermanentimmediateactionsstore-) if an implementation is provided),
-then in the `UserImmediateActionsMiddleware` we will check every user if they need to be signed-out or 
-their cookie needs to be refreshed using the data given by [**main store service**](#iimmediateactionsstore-). It is worth mentioning that because of how this middleware 
-is implemented and the usage of a caching service that usually stores data in the ram, there should be little to no performance penalty. 
-(The main bottleneck here is the read performance of the caching service used and we cant really benchmark it,
-because the performance will vary based on the caching service you use, your latency to the caching server and many other parameters. but as mentioned, generally there should be little to
+then in the `UserImmediateActionsMiddleware` we will check every user if they need to be signed-out or their cookie needs to be refreshed using the data given by [**main store service**](#iimmediateactionsstore-). It is worth mentioning that because of how this middleware is implemented and the usage of a caching service that usually stores data in the ram, there should be little to no performance penalty. 
+(The main bottleneck here is the read performance of the caching service used and we can't really benchmark it,
+because the performance will vary based on the caching service you use, your latency to the caching server, and many other parameters. but as mentioned, generally, there should be little to
 no performance penalty.)
 
 ## Give a Star! ⭐️
 
-If you like this project or you are using it in you application, please give it a star. Thanks!
+If you like this project or you are using it in your application, please give it a star. Thanks!
 
 </div>
 
