@@ -1,8 +1,11 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using UserImmediateActions.Models;
 using UserImmediateActions.Stores;
 
@@ -11,13 +14,22 @@ namespace UserImmediateActions
     // ReSharper disable once ClassNeverInstantiated.Global
     public class UserImmediateActionsMiddleware
     {
-        private readonly RequestDelegate _next;
+        private readonly TimeSpan _expirationTimeForRefreshCookie;
+        private readonly TimeSpan _expirationTimeForSignOut;
         private readonly ILogger<UserImmediateActionsMiddleware> _logger;
+        private readonly RequestDelegate _next;
 
-        public UserImmediateActionsMiddleware(RequestDelegate next, ILogger<UserImmediateActionsMiddleware> logger)
+        public UserImmediateActionsMiddleware(RequestDelegate next,
+            ILogger<UserImmediateActionsMiddleware> logger,
+            IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions,
+            IOptions<SecurityStampValidatorOptions> securityStampValidatorOptions)
         {
             _next = next;
             _logger = logger;
+            var cookieOptions = cookieAuthenticationOptions?.Value ?? new CookieAuthenticationOptions();
+            _expirationTimeForRefreshCookie = cookieOptions.ExpireTimeSpan;
+            var securityStampOptions = securityStampValidatorOptions?.Value ?? new SecurityStampValidatorOptions();
+            _expirationTimeForSignOut = securityStampOptions.ValidationInterval;
         }
 
         public async Task InvokeAsync(HttpContext context,
@@ -72,6 +84,7 @@ namespace UserImmediateActions
                     {
                         await currentUserWrapperService.RefreshSignInAsync(user);
                         await actionsStore.AddAsync(userActionStoreUniqueKey,
+                            _expirationTimeForRefreshCookie,
                             new ImmediateActionDataModel(DateTime.Now, AddPurpose.UserCookieWasRefreshed));
 
                         _logger.LogInformation("User cookie with userId '{UserId}' has been refreshed", userId);
@@ -85,6 +98,7 @@ namespace UserImmediateActions
                     {
                         await currentUserWrapperService.SignOutAsync();
                         await actionsStore.AddAsync(userActionStoreUniqueKey,
+                            _expirationTimeForSignOut,
                             new ImmediateActionDataModel(DateTime.Now, AddPurpose.UserWasSignedOut));
 
                         _logger.LogInformation("User with userId '{UserId}' has been signed out", userId);

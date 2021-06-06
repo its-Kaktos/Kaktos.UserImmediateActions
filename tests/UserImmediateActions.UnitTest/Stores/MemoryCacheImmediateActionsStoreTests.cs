@@ -2,9 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
 using Moq;
 using UserImmediateActions.Models;
 using UserImmediateActions.Stores;
@@ -14,11 +12,11 @@ namespace UserImmediateActions.UnitTest.Stores
 {
     public class MemoryCacheImmediateActionsStoreTests
     {
+        private readonly DateTime _dateTimeNow = DateTime.Now;
+        private readonly Mock<IDateTimeProvider> _dateTimeProviderMock = new();
+        private readonly TimeSpan _defaultExpireTimeSpan = TimeSpan.FromDays(14);
         private readonly Mock<IMemoryCache> _memoryCacheMock = new();
         private readonly Mock<IPermanentImmediateActionsStore> _permanentImmediateActionsStoreMock = new();
-        private readonly Mock<IDateTimeProvider> _dateTimeProviderMock = new();
-        private readonly DateTime _dateTimeNow = DateTime.Now;
-        private readonly TimeSpan _defaultExpireTimeSpan = TimeSpan.FromDays(14);
         private readonly MemoryCacheImmediateActionsStore _sut;
 
         public MemoryCacheImmediateActionsStoreTests()
@@ -26,16 +24,15 @@ namespace UserImmediateActions.UnitTest.Stores
             _dateTimeProviderMock.Setup(_ => _.Now()).Returns(_dateTimeNow);
             _sut = new MemoryCacheImmediateActionsStore(_memoryCacheMock.Object,
                 _permanentImmediateActionsStoreMock.Object,
-                _dateTimeProviderMock.Object,
-                new OptionsWrapper<CookieAuthenticationOptions>(new CookieAuthenticationOptions()));
+                _dateTimeProviderMock.Object);
         }
 
         [Fact]
         public void Add_ShouldThrowArgumentException_WhenArgumentIsNullOrEmptyString()
         {
             var data = new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie);
-            Assert.Throws<ArgumentException>("key", () => _sut.Add(null, data));
-            Assert.Throws<ArgumentException>("key", () => _sut.Add("", data));
+            Assert.Throws<ArgumentException>("key", () => _sut.Add(null, _defaultExpireTimeSpan, data));
+            Assert.Throws<ArgumentException>("key", () => _sut.Add("", _defaultExpireTimeSpan, data));
         }
 
         [Fact]
@@ -52,7 +49,7 @@ namespace UserImmediateActions.UnitTest.Stores
                 .Returns<string>(_ => cacheEntry.Object);
 
             // Act
-            _sut.Add(key, new ImmediateActionDataModel(_dateTimeNow, AddPurpose.RefreshCookie));
+            _sut.Add(key, _defaultExpireTimeSpan, new ImmediateActionDataModel(_dateTimeNow, AddPurpose.RefreshCookie));
 
             // Assert
             _memoryCacheMock.Verify(cache => cache.CreateEntry(It.Is<string>(s => s == key)), Times.Once);
@@ -69,8 +66,8 @@ namespace UserImmediateActions.UnitTest.Stores
         public async Task AddAsync_ShouldThrowArgumentException_WhenArgumentIsNullOrEmptyString()
         {
             var data = new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie);
-            await Assert.ThrowsAsync<ArgumentException>("key", () => _sut.AddAsync(null, data));
-            await Assert.ThrowsAsync<ArgumentException>("key", () => _sut.AddAsync("", data));
+            await Assert.ThrowsAsync<ArgumentException>("key", () => _sut.AddAsync(null, _defaultExpireTimeSpan, data));
+            await Assert.ThrowsAsync<ArgumentException>("key", () => _sut.AddAsync("", _defaultExpireTimeSpan, data));
         }
 
         [Fact]
@@ -87,7 +84,7 @@ namespace UserImmediateActions.UnitTest.Stores
                 .Returns<string>(_ => cacheEntry.Object);
 
             // Act
-            await _sut.AddAsync(key, new ImmediateActionDataModel(_dateTimeNow, AddPurpose.RefreshCookie));
+            await _sut.AddAsync(key, _defaultExpireTimeSpan, new ImmediateActionDataModel(_dateTimeNow, AddPurpose.RefreshCookie));
 
             // Assert
             _memoryCacheMock.Verify(cache => cache.CreateEntry(It.Is<string>(s => s == key)), Times.Once);

@@ -1,6 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Moq;
 using UserImmediateActions.Models;
 using UserImmediateActions.Stores;
@@ -14,15 +17,19 @@ namespace UserImmediateActions.UnitTest
         private readonly Mock<IUserActionStoreKeyGenerator> _userActionStoreKeyGeneratorMock = new();
         private readonly Mock<IDateTimeProvider> _dateTimeProviderMock = new();
         private readonly DateTime _dateTimeNow = DateTime.Now;
+        private readonly TimeSpan _expirationTimeForRefreshCookie = TimeSpan.FromDays(14);
+        private readonly TimeSpan _expirationTimeForSignOut = TimeSpan.FromMinutes(30);
         private readonly UserImmediateActionsService _sut;
 
         public UserImmediateActionsServiceTests()
         {
             _dateTimeProviderMock.Setup(_ => _.Now()).Returns(_dateTimeNow);
-            
+
             _sut = new UserImmediateActionsService(_immediateActionsStoreMock.Object,
                 _userActionStoreKeyGeneratorMock.Object,
-                _dateTimeProviderMock.Object);
+                _dateTimeProviderMock.Object,
+                new OptionsWrapper<CookieAuthenticationOptions>(new CookieAuthenticationOptions()),
+                new OptionsWrapper<SecurityStampValidatorOptions>(new SecurityStampValidatorOptions()));
         }
 
         [Fact]
@@ -39,7 +46,7 @@ namespace UserImmediateActions.UnitTest
             var userId = Guid.NewGuid().ToString();
             var key = Guid.NewGuid() + userId;
             _userActionStoreKeyGeneratorMock.Setup(_ => _.GenerateKey(It.IsAny<string>())).Returns(key);
-            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(), It.IsAny<ImmediateActionDataModel>()));
+            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<ImmediateActionDataModel>()));
 
             // Act
             _sut.RefreshCookie(userId);
@@ -48,7 +55,8 @@ namespace UserImmediateActions.UnitTest
             _userActionStoreKeyGeneratorMock.Verify(_ => _.GenerateKey(It.Is<string>(s => s == userId)), Times.Once);
             _immediateActionsStoreMock.Verify(_ => _.Add(
                     It.Is<string>(s => s == key),
-                    It.Is<ImmediateActionDataModel>(model => 
+                    It.Is<TimeSpan>(t => t == _expirationTimeForRefreshCookie),
+                    It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.RefreshCookie &&
                         model.AddedDate == _dateTimeNow)),
                 Times.Once);
@@ -68,7 +76,7 @@ namespace UserImmediateActions.UnitTest
             var userId = Guid.NewGuid().ToString();
             var key = Guid.NewGuid() + userId;
             _userActionStoreKeyGeneratorMock.Setup(_ => _.GenerateKey(It.IsAny<string>())).Returns(key);
-            _immediateActionsStoreMock.Setup(_ => _.AddAsync(It.IsAny<string>(), It.IsAny<ImmediateActionDataModel>(), It.IsAny<CancellationToken>()));
+            _immediateActionsStoreMock.Setup(_ => _.AddAsync(It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<ImmediateActionDataModel>(), It.IsAny<CancellationToken>()));
 
             // Act
             await _sut.RefreshCookieAsync(userId);
@@ -77,9 +85,10 @@ namespace UserImmediateActions.UnitTest
             _userActionStoreKeyGeneratorMock.Verify(_ => _.GenerateKey(It.Is<string>(s => s == userId)), Times.Once);
             _immediateActionsStoreMock.Verify(_ => _.AddAsync(
                     It.Is<string>(s => s == key),
-                    It.Is<ImmediateActionDataModel>(model => 
-                            model.Purpose == AddPurpose.RefreshCookie &&
-                            model.AddedDate == _dateTimeNow),
+                    It.Is<TimeSpan>(t => t == _expirationTimeForRefreshCookie),
+                    It.Is<ImmediateActionDataModel>(model =>
+                        model.Purpose == AddPurpose.RefreshCookie &&
+                        model.AddedDate == _dateTimeNow),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
         }
@@ -98,7 +107,7 @@ namespace UserImmediateActions.UnitTest
             var userId = Guid.NewGuid().ToString();
             var key = Guid.NewGuid() + userId;
             _userActionStoreKeyGeneratorMock.Setup(_ => _.GenerateKey(It.IsAny<string>())).Returns(key);
-            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(), It.IsAny<ImmediateActionDataModel>()));
+            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<ImmediateActionDataModel>()));
 
             // Act
             _sut.SignOut(userId);
@@ -107,7 +116,8 @@ namespace UserImmediateActions.UnitTest
             _userActionStoreKeyGeneratorMock.Verify(_ => _.GenerateKey(It.Is<string>(s => s == userId)), Times.Once);
             _immediateActionsStoreMock.Verify(_ => _.Add(
                     It.Is<string>(s => s == key),
-                    It.Is<ImmediateActionDataModel>(model => 
+                    It.Is<TimeSpan>(t => t == _expirationTimeForSignOut),
+                    It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.SignOut &&
                         model.AddedDate == _dateTimeNow)),
                 Times.Once);
@@ -127,7 +137,7 @@ namespace UserImmediateActions.UnitTest
             var userId = Guid.NewGuid().ToString();
             var key = Guid.NewGuid() + userId;
             _userActionStoreKeyGeneratorMock.Setup(_ => _.GenerateKey(It.IsAny<string>())).Returns(key);
-            _immediateActionsStoreMock.Setup(_ => _.AddAsync(It.IsAny<string>(), It.IsAny<ImmediateActionDataModel>(), It.IsAny<CancellationToken>()));
+            _immediateActionsStoreMock.Setup(_ => _.AddAsync(It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<ImmediateActionDataModel>(), It.IsAny<CancellationToken>()));
 
             // Act
             await _sut.SignOutAsync(userId);
@@ -136,7 +146,8 @@ namespace UserImmediateActions.UnitTest
             _userActionStoreKeyGeneratorMock.Verify(_ => _.GenerateKey(It.Is<string>(s => s == userId)), Times.Once);
             _immediateActionsStoreMock.Verify(_ => _.AddAsync(
                     It.Is<string>(s => s == key),
-                    It.Is<ImmediateActionDataModel>(model => 
+                    It.Is<TimeSpan>(t => t == _expirationTimeForSignOut),
+                    It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.SignOut &&
                         model.AddedDate == _dateTimeNow),
                     It.IsAny<CancellationToken>()),

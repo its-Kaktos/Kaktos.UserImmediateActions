@@ -1,53 +1,47 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
 using UserImmediateActions.Models;
 
 namespace UserImmediateActions.Stores
 {
     public class MemoryCacheImmediateActionsStore : IImmediateActionsStore
     {
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IMemoryCache _memoryCache;
         private readonly IPermanentImmediateActionsStore _permanentImmediateActionsStore;
-        private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly TimeSpan _defaultExpirationRelativeToNow;
 
         public MemoryCacheImmediateActionsStore(IMemoryCache memoryCache,
             IPermanentImmediateActionsStore permanentImmediateActionsStore,
-            IDateTimeProvider dateTimeProvider,
-            IOptions<CookieAuthenticationOptions> options)
+            IDateTimeProvider dateTimeProvider)
         {
             _memoryCache = memoryCache;
             _permanentImmediateActionsStore = permanentImmediateActionsStore;
             _dateTimeProvider = dateTimeProvider;
-            var cookieAuthenticationOptions = options?.Value ?? new CookieAuthenticationOptions();
-            _defaultExpirationRelativeToNow = cookieAuthenticationOptions.ExpireTimeSpan;
         }
 
-        public void Add(string key, ImmediateActionDataModel data)
+        public void Add(string key, TimeSpan expirationTime, ImmediateActionDataModel data)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("Value cannot be null or empty.", nameof(key));
 
             _permanentImmediateActionsStore.Add(key,
-                _dateTimeProvider.Now().Add(_defaultExpirationRelativeToNow),
+                _dateTimeProvider.Now().Add(expirationTime),
                 data);
 
-            _memoryCache.Set(key, data, absoluteExpirationRelativeToNow: _defaultExpirationRelativeToNow);
+            _memoryCache.Set(key, data, expirationTime);
         }
 
-        public async Task AddAsync(string key, ImmediateActionDataModel data, CancellationToken cancellationToken = default)
+        public async Task AddAsync(string key, TimeSpan expirationTime, ImmediateActionDataModel data, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("Value cannot be null or empty.", nameof(key));
 
             await _permanentImmediateActionsStore.AddAsync(key,
-                _dateTimeProvider.Now().Add(_defaultExpirationRelativeToNow),
+                _dateTimeProvider.Now().Add(expirationTime),
                 data,
                 cancellationToken);
 
-            Add(key, data);
+            Add(key, expirationTime, data);
         }
 
         public ImmediateActionDataModel Get(string key)
