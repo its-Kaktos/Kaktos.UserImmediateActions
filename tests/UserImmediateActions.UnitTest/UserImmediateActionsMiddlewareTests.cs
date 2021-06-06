@@ -4,9 +4,11 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using UserImmediateActions.Models;
 using UserImmediateActions.Stores;
@@ -21,11 +23,16 @@ namespace UserImmediateActions.UnitTest
         private readonly Mock<ICurrentUserWrapperService> _currentUserWrapperServiceMock = new();
         private readonly Mock<HttpContext> _httpContextMock = new();
         private readonly Mock<ILogger<UserImmediateActionsMiddleware>> _loggerMock = new();
+        private static readonly TimeSpan ExpirationTimeForRefreshCookie = TimeSpan.FromDays(14);
+        private static readonly TimeSpan ExpirationTimeForSignOut = TimeSpan.FromMinutes(30);
         private readonly UserImmediateActionsMiddleware _sut;
 
         public UserImmediateActionsMiddlewareTests()
         {
-            _sut = new UserImmediateActionsMiddleware(_ => Task.CompletedTask, _loggerMock.Object);
+            _sut = new UserImmediateActionsMiddleware(_ => Task.CompletedTask,
+                _loggerMock.Object,
+                new OptionsWrapper<CookieAuthenticationOptions>(new CookieAuthenticationOptions()),
+                new OptionsWrapper<SecurityStampValidatorOptions>(new SecurityStampValidatorOptions()));
         }
 
         [Fact]
@@ -179,6 +186,7 @@ namespace UserImmediateActions.UnitTest
                     It.IsAny<CancellationToken>()),
                 Times.Never);
             _immediateActionsStoreMock.Verify(_ => _.AddAsync(It.IsAny<string>(),
+                    It.IsAny<TimeSpan>(),
                     It.IsAny<ImmediateActionDataModel>(),
                     It.IsAny<CancellationToken>()),
                 Times.Never);
@@ -203,7 +211,8 @@ namespace UserImmediateActions.UnitTest
         [MemberData(nameof(GetDataFor_ShouldCall_RefreshSignInAsync_And_AddAsync_WhenUserIsAddedForRefreshingCookie))]
         public async Task ShouldCall_RefreshSignInAsync_And_AddAsync_WhenUserIsAddedForAnAction(
             ImmediateActionDataModel actionToPreformOnUser,
-            ImmediateActionDataModel previousActionPreformedOnUser)
+            ImmediateActionDataModel previousActionPreformedOnUser,
+            TimeSpan expirationTime)
         {
             // Arrange
             var userId = Guid.NewGuid().ToString();
@@ -270,7 +279,8 @@ namespace UserImmediateActions.UnitTest
                     Times.Once);
 
                 _immediateActionsStoreMock.Verify(_ => _.AddAsync(It.Is<string>(s => s == userActionStoreUniqueKey),
-                        It.Is<ImmediateActionDataModel>(model => model.Purpose == AddPurpose.UserCookieWasRefreshed) ,
+                        It.Is<TimeSpan>(t => t == expirationTime),
+                        It.Is<ImmediateActionDataModel>(model => model.Purpose == AddPurpose.UserCookieWasRefreshed),
                         It.IsAny<CancellationToken>()),
                     Times.Once);
             }
@@ -280,6 +290,7 @@ namespace UserImmediateActions.UnitTest
                     Times.Once);
 
                 _immediateActionsStoreMock.Verify(_ => _.AddAsync(It.Is<string>(s => s == userActionStoreUniqueKey),
+                        It.Is<TimeSpan>(t => t == expirationTime),
                         It.Is<ImmediateActionDataModel>(model =>
                             model.Purpose == AddPurpose.UserWasSignedOut),
                         It.IsAny<CancellationToken>()),
@@ -292,22 +303,26 @@ namespace UserImmediateActions.UnitTest
             yield return new object[]
             {
                 new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie),
-                null
+                null,
+                ExpirationTimeForRefreshCookie
             };
             yield return new object[]
             {
                 new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(-1), AddPurpose.UserWasSignedOut)
+                new ImmediateActionDataModel(DateTime.Now.AddSeconds(-1), AddPurpose.UserWasSignedOut),
+                ExpirationTimeForRefreshCookie
             };
             yield return new object[]
             {
                 new ImmediateActionDataModel(DateTime.Now, AddPurpose.SignOut),
-                null
+                null,
+                ExpirationTimeForSignOut
             };
             yield return new object[]
             {
                 new ImmediateActionDataModel(DateTime.Now, AddPurpose.SignOut),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(-1), AddPurpose.UserCookieWasRefreshed)
+                new ImmediateActionDataModel(DateTime.Now.AddSeconds(-1), AddPurpose.UserCookieWasRefreshed),
+                ExpirationTimeForSignOut
             };
         }
     }
