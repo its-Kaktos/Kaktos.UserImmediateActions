@@ -35,5 +35,13 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3F50280-D9A6-4898-A2DA-853CE6F1E8B2}
+		{2843BA48-3E8F-4BBC-89AA-53923464A9E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2843BA48-3E8F-4BBC-89AA-53923464A9E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2843BA48-3E8F-4BBC-89AA-53923464A9E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2843BA48-3E8F-4BBC-89AA-53923464A9E6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{651D5016-8D25-44DC-AFB6-A477B386F9FE} = {E59BF380-2FC3-4CA2-B2CD-8827E20E3E8F}
+		{2843BA48-3E8F-4BBC-89AA-53923464A9E6} = {51C8C4B6-534A-4BD3-9F9D-D474B54A220D}
 	EndGlobalSection
 EndGlobal
