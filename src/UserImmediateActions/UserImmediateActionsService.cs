@@ -46,7 +46,7 @@ namespace UserImmediateActions
             if (string.IsNullOrEmpty(userId)) throw new ArgumentException("Value cannot be null or empty.", nameof(userId));
 
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
-            await _immediateActionsStore.AddAsync(key, _expirationTimeForSignOut, new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.RefreshCookie),
+            await _immediateActionsStore.AddAsync(key, _expirationTimeForRefreshCookie, new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.RefreshCookie),
                 cancellationToken);
         }
 
@@ -56,7 +56,7 @@ namespace UserImmediateActions
 
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
 
-            _immediateActionsStore.Add(key, _expirationTimeForRefreshCookie, new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.SignOut));
+            _immediateActionsStore.Add(key, _expirationTimeForSignOut, new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.SignOut));
         }
 
         public async Task SignOutAsync(string userId, CancellationToken cancellationToken = default)
