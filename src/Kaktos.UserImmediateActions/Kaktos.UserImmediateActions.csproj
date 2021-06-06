@@ -19,5 +19,4 @@
             <_Parameter1>$(MSBuildProjectName).UnitTest</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
-
 </Project>

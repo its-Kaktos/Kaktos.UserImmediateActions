@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{51C8C4B6-534A-4BD3-9F9D-D474B54A220D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EA7140BB-98CD-4013-AB76-771C53E353A9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E59BF380-2FC3-4CA2-B2CD-8827E20E3E8F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1B88FA11-F4A1-4838-9BB1-D039E8F05579}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kaktos.UserImmediateActions", "src\Kaktos.UserImmediateActions\Kaktos.UserImmediateActions.csproj", "{651D5016-8D25-44DC-AFB6-A477B386F9FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaktos.UserImmediateActions", "src\Kaktos.UserImmediateActions\Kaktos.UserImmediateActions.csproj", "{7359DD11-B9E3-405B-8E0F-E6864C41BF25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaktos.UserImmediateActions.UnitTest", "tests\Kaktos.UserImmediateActions.UnitTest\Kaktos.UserImmediateActions.UnitTest.csproj", "{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaktos.UserImmediateActions.UnitTest", "tests\Kaktos.UserImmediateActions.UnitTest\Kaktos.UserImmediateActions.UnitTest.csproj", "{C5A7A63C-F0D7-42FC-9246-3642F24FD68B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,31 +17,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{651D5016-8D25-44DC-AFB6-A477B386F9FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{651D5016-8D25-44DC-AFB6-A477B386F9FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{651D5016-8D25-44DC-AFB6-A477B386F9FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{651D5016-8D25-44DC-AFB6-A477B386F9FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7359DD11-B9E3-405B-8E0F-E6864C41BF25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7359DD11-B9E3-405B-8E0F-E6864C41BF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7359DD11-B9E3-405B-8E0F-E6864C41BF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7359DD11-B9E3-405B-8E0F-E6864C41BF25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5A7A63C-F0D7-42FC-9246-3642F24FD68B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5A7A63C-F0D7-42FC-9246-3642F24FD68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5A7A63C-F0D7-42FC-9246-3642F24FD68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5A7A63C-F0D7-42FC-9246-3642F24FD68B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{651D5016-8D25-44DC-AFB6-A477B386F9FE} = {E59BF380-2FC3-4CA2-B2CD-8827E20E3E8F}
-		{45C6ADC3-90E4-481E-BA6C-B97031B3DAA7} = {51C8C4B6-534A-4BD3-9F9D-D474B54A220D}
+		{7359DD11-B9E3-405B-8E0F-E6864C41BF25} = {EA7140BB-98CD-4013-AB76-771C53E353A9}
+		{C5A7A63C-F0D7-42FC-9246-3642F24FD68B} = {1B88FA11-F4A1-4838-9BB1-D039E8F05579}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B3F50280-D9A6-4898-A2DA-853CE6F1E8B2}
-		{2843BA48-3E8F-4BBC-89AA-53923464A9E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2843BA48-3E8F-4BBC-89AA-53923464A9E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2843BA48-3E8F-4BBC-89AA-53923464A9E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2843BA48-3E8F-4BBC-89AA-53923464A9E6}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{651D5016-8D25-44DC-AFB6-A477B386F9FE} = {E59BF380-2FC3-4CA2-B2CD-8827E20E3E8F}
-		{2843BA48-3E8F-4BBC-89AA-53923464A9E6} = {51C8C4B6-534A-4BD3-9F9D-D474B54A220D}
+		SolutionGuid = {68CC8DAA-5B6D-4895-8C03-2EB2DD7D418C}
 	EndGlobalSection
 EndGlobal
