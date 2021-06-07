@@ -1,4 +1,5 @@
 using Kaktos.UserImmediateActions.Extensions;
+using Kaktos.UserImmediateActions.Stores;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,13 @@ using SampleIdentityMvc.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
+using SampleIdentityMvc.Quartz;
+using SampleIdentityMvc.Quartz.JobFactories;
+using SampleIdentityMvc.Quartz.Jobs;
+using SampleIdentityMvc.Services;
 
 namespace SampleIdentityMvc
 {
@@ -29,9 +37,25 @@ namespace SampleIdentityMvc
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddUserImmediateActions(); // Add default services to IoC Container
-            
+                // Add default services to IoC Container.
+                // اضافه کردن سرویس های پیشفرض
+                .AddUserImmediateActions()
+                // Add our custom permanent store.
+                // اضافه کردن سرویس ذخیره ساز دائمی
+                .AddPermanentImmediateActionsStore<ApplicationPermanentImmediateActionsStore>();
+
             services.AddControllersWithViews();
+
+            // Add Quartz services and jobs
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddHostedService<QuartzHostedService>();
+            services.AddSingleton<RemoveExpiredImmediateActionDatabaseModelFromDbJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(RemoveExpiredImmediateActionDatabaseModelFromDbJob),
+                // job will run every 6 hours to remove expired ImmediateActionDatabaseModel from database.
+                // این جاب هر 6 ساعت استارت میشه تا مدل هایی که تاریخ انتقاضاشون گذشته رو از دیتابیس پاک کنه
+                cronExpression: "0 0 0/6 1/1 * ? *"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,8 +80,10 @@ namespace SampleIdentityMvc
 
             app.UseAuthentication();
 
-            app.UseUserImmediateActions(); // Use this middleware between 'UseAuthentication' and 'UseAuthorization'
-            
+            // Use this middleware between 'UseAuthentication' and 'UseAuthorization'
+            // استفاده کنید UseAuthentication و UseAuthorization از این میدل ور بین
+            app.UseUserImmediateActions(); 
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

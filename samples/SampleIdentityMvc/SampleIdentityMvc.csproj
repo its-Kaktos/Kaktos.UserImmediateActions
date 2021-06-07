@@ -16,6 +16,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+        <PackageReference Include="Quartz.AspNetCore" Version="3.3.2" />
     </ItemGroup>
 
     <ItemGroup>
