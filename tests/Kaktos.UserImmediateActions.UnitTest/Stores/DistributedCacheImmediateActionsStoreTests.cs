@@ -74,7 +74,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
         public async Task AddAsync_ShouldThrowArgumentException_WhenArgumentIsNull_OrEmptyString()
         {
             var data = new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie);
-            await Assert.ThrowsAsync<ArgumentNullException>("key", () => _sut.AddAsync("key", _defaultExpireTimeSpan, null));
+            await Assert.ThrowsAsync<ArgumentNullException>("data", () => _sut.AddAsync("key", _defaultExpireTimeSpan, null));
             await Assert.ThrowsAsync<ArgumentException>("key", () => _sut.AddAsync(null, _defaultExpireTimeSpan, data));
             await Assert.ThrowsAsync<ArgumentException>("key", () => _sut.AddAsync("", _defaultExpireTimeSpan, data));
         }
