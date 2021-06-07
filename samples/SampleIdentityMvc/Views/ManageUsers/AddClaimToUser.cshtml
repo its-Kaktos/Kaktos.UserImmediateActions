@@ -3,30 +3,21 @@
     ViewData["Title"] = "Add claim to user";
 }
 
-@if (!Model.UserClaims.Any())
-{
-    <h1>No claims were found, please add some claims first.</h1>
-}
-else
-{
-    <form asp-controller="ManageUsers" asp-action="AddClaimToUser" method="post">
-        <div asp-validation-summary="ModelOnly"></div>
+<form asp-controller="ManageUsers" asp-action="AddClaimToUser" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
 
-        @for (int i = 0; i < Model.UserClaims.Count; i++)
-        {
-            <div class="form-group">
-                <input asp-for="@Model.UserClaims[i].IsSelected" />
-                <label>@Model.UserClaims[i].ClaimType</label>
-            </div>
-            <div class="form-group">
-                <input asp-for="@Model.UserClaims[i].IsSelected" />
-                <label>@Model.UserClaims[i].ClaimType</label>
+    <div class="form-group">
+        <label asp-for="ClaimType"></label>
+        <input asp-for="ClaimType"/>
+        <span asp-validation-for="ClaimType"></span>
+    </div>
 
-                <input asp-for="@Model.UserClaims[i].ClaimType" />
-            </div>
-        }
-        <input type="hidden" asp-for="@Model.UserId" />
-        <button class="btn btn-primary" type="submit">Submit</button>
-    </form>
-}
-</html>
+    <div class="form-group">
+        <label asp-for="ClaimValue"></label>
+        <input asp-for="ClaimValue"/>
+        <span asp-validation-for="ClaimValue"></span>
+    </div>
+
+    <input type="hidden" asp-for="@Model.UserId"/>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
