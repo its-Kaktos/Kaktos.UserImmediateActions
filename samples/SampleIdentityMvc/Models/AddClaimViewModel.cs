@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SampleIdentityMvc.Models
 {
-    public class AddOrRemoveClaimViewModel
+    public class AddClaimViewModel
     {
         [Required]
         public string UserId { get; set; }
@@ -19,8 +19,5 @@ namespace SampleIdentityMvc.Models
         
         [Required]
         public string ClaimValue { get; set; }
-        
-        [Required]
-        public bool IsSelected { get; set; }
     }
 }
