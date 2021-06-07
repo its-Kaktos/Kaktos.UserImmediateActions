@@ -7,6 +7,11 @@ using SampleIdentityMvc.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
+using SampleIdentityMvc.Quartz;
+using SampleIdentityMvc.Quartz.JobFactories;
 
 namespace SampleIdentityMvc
 {
@@ -32,6 +37,12 @@ namespace SampleIdentityMvc
                 .AddUserImmediateActions(); // Add default services to IoC Container
             
             services.AddControllersWithViews();
+            
+            // Add Quartz services
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddHostedService<QuartzHostedService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
