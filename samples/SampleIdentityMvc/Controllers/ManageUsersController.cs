@@ -49,19 +49,21 @@ namespace SampleIdentityMvc.Controllers
                 var user = await _userManager.FindByIdAsync(model.UserId);
                 if (user == null) return NotFound();
 
-                // var claimsToAdd = model.UserClaims
-                //     .Where(r => r.IsSelected)
-                //     .Select(c => new Claim(c.ClaimType, c.ClaimValue))
-                //     .ToList();
-                //
-                // var result = await _userManager.AddClaimsAsync(user, claimsToAdd);
-                //
-                // if (result.Succeeded) return RedirectToAction("AddClaimToUser", new {id = model.UserId});
-                //
-                // foreach (var error in result.Errors)
-                // {
-                //     ModelState.AddModelError(string.Empty, error.Description);
-                // }
+                var userClaims = await _userManager.GetClaimsAsync(user);
+                if (userClaims.Any(c=> c.Type == model.ClaimType && c.Value == model.ClaimValue))
+                {
+                    ModelState.AddModelError(string.Empty, "Claim already exists");
+                    return View(model);
+                }
+                
+                var result = await _userManager.AddClaimAsync(user, new Claim(model.ClaimType, model.ClaimValue));
+
+                if (result.Succeeded) return RedirectToAction("AddClaimToUser", new {id = model.UserId});
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
 
             return View(model);
