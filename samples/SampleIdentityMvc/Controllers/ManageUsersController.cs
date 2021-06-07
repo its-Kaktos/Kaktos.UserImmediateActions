@@ -37,44 +37,31 @@ namespace SampleIdentityMvc.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
 
-            var userClaims = (await _userManager.GetClaimsAsync(user))
-                .Select(c => new ClaimsViewModel
-                {
-                    ClaimType = c.Type,
-                    ClaimValue = c.Value
-                }).ToList();
-
-            var model = new AddOrRemoveClaimViewModel
-            {
-                UserId = id,
-                UserClaims = userClaims
-            };
-
-            return View(model);
+            return View(new AddClaimViewModel {UserId = id});
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddClaimToUser(AddOrRemoveClaimViewModel model)
+        public async Task<IActionResult> AddClaimToUser(AddClaimViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByIdAsync(model.UserId);
                 if (user == null) return NotFound();
 
-                var claimsToAdd = model.UserClaims
-                    .Where(r => r.IsSelected)
-                    .Select(c => new Claim(c.ClaimType, c.ClaimValue))
-                    .ToList();
-
-                var result = await _userManager.AddClaimsAsync(user, claimsToAdd);
-
-                if (result.Succeeded) return RedirectToAction("AddClaimToUser", new {id = model.UserId});
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                // var claimsToAdd = model.UserClaims
+                //     .Where(r => r.IsSelected)
+                //     .Select(c => new Claim(c.ClaimType, c.ClaimValue))
+                //     .ToList();
+                //
+                // var result = await _userManager.AddClaimsAsync(user, claimsToAdd);
+                //
+                // if (result.Succeeded) return RedirectToAction("AddClaimToUser", new {id = model.UserId});
+                //
+                // foreach (var error in result.Errors)
+                // {
+                //     ModelState.AddModelError(string.Empty, error.Description);
+                // }
             }
 
             return View(model);
