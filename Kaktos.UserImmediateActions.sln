@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaktos.UserImmediateActions
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaktos.UserImmediateActions.UnitTest", "tests\Kaktos.UserImmediateActions.UnitTest\Kaktos.UserImmediateActions.UnitTest.csproj", "{C5A7A63C-F0D7-42FC-9246-3642F24FD68B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{375FE708-9CB3-493C-92D7-C09D9800414E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleIdentityMvc", "samples\SampleIdentityMvc\SampleIdentityMvc.csproj", "{8B167843-91B2-42EE-BF10-A1694ADC92D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,10 @@ Global
 		{C5A7A63C-F0D7-42FC-9246-3642F24FD68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5A7A63C-F0D7-42FC-9246-3642F24FD68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5A7A63C-F0D7-42FC-9246-3642F24FD68B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B167843-91B2-42EE-BF10-A1694ADC92D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B167843-91B2-42EE-BF10-A1694ADC92D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B167843-91B2-42EE-BF10-A1694ADC92D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B167843-91B2-42EE-BF10-A1694ADC92D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +40,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7359DD11-B9E3-405B-8E0F-E6864C41BF25} = {EA7140BB-98CD-4013-AB76-771C53E353A9}
 		{C5A7A63C-F0D7-42FC-9246-3642F24FD68B} = {1B88FA11-F4A1-4838-9BB1-D039E8F05579}
+		{8B167843-91B2-42EE-BF10-A1694ADC92D8} = {375FE708-9CB3-493C-92D7-C09D9800414E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {68CC8DAA-5B6D-4895-8C03-2EB2DD7D418C}
