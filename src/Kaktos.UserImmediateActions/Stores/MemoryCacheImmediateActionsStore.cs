@@ -21,25 +21,35 @@ namespace Kaktos.UserImmediateActions.Stores
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public void Add(string key, TimeSpan expirationTime, ImmediateActionDataModel data)
+        public void Add(string key, TimeSpan expirationTime, ImmediateActionDataModel data, bool storeOnPermanentStoreAsWell = true)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("Value cannot be null or empty.", nameof(key));
 
-            _permanentImmediateActionsStore.Add(key,
-                _dateTimeProvider.Now().Add(expirationTime),
-                data);
+            if (storeOnPermanentStoreAsWell)
+            {
+                _permanentImmediateActionsStore.Add(key,
+                    _dateTimeProvider.Now().Add(expirationTime),
+                    data);
+            }
 
             _memoryCache.Set(key, data, expirationTime);
         }
 
-        public async Task AddAsync(string key, TimeSpan expirationTime, ImmediateActionDataModel data, CancellationToken cancellationToken = default)
+        public async Task AddAsync(string key,
+            TimeSpan expirationTime,
+            ImmediateActionDataModel data,
+            bool storeOnPermanentStoreAsWell = true,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("Value cannot be null or empty.", nameof(key));
 
-            await _permanentImmediateActionsStore.AddAsync(key,
-                _dateTimeProvider.Now().Add(expirationTime),
-                data,
-                cancellationToken);
+            if (storeOnPermanentStoreAsWell)
+            {
+                await _permanentImmediateActionsStore.AddAsync(key,
+                    _dateTimeProvider.Now().Add(expirationTime),
+                    data,
+                    cancellationToken);
+            }
 
             Add(key, expirationTime, data);
         }
