@@ -12,6 +12,7 @@ using Quartz.Impl;
 using Quartz.Spi;
 using SampleIdentityMvc.Quartz;
 using SampleIdentityMvc.Quartz.JobFactories;
+using SampleIdentityMvc.Quartz.Jobs;
 
 namespace SampleIdentityMvc
 {
@@ -38,11 +39,14 @@ namespace SampleIdentityMvc
             
             services.AddControllersWithViews();
             
-            // Add Quartz services
+            // Add Quartz services and jobs
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
             services.AddHostedService<QuartzHostedService>();
-
+            services.AddSingleton<RemoveExpiredImmediateActionDatabaseModelFromDbJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(RemoveExpiredImmediateActionDatabaseModelFromDbJob),
+                cronExpression: "0 0 0/6 1/1 * ? *")); // job will run every 6 hours to remove expired ImmediateActionDatabaseModel from database.
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
