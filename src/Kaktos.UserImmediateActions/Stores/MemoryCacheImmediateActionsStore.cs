@@ -23,6 +23,7 @@ namespace Kaktos.UserImmediateActions.Stores
 
         public void Add(string key, TimeSpan expirationTime, ImmediateActionDataModel data, bool storeOnPermanentStoreAsWell = true)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("Value cannot be null or empty.", nameof(key));
 
             if (storeOnPermanentStoreAsWell)
@@ -41,6 +42,7 @@ namespace Kaktos.UserImmediateActions.Stores
             bool storeOnPermanentStoreAsWell = true,
             CancellationToken cancellationToken = default)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("Value cannot be null or empty.", nameof(key));
 
             if (storeOnPermanentStoreAsWell)
