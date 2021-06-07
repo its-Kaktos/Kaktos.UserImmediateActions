@@ -1,0 +1,24 @@
+﻿@model List<AllUserClaimsViewModel>
+@{
+    ViewData["Title"] = "User claims";
+}
+
+
+@if (!Model.Any())
+{
+    <h1>No claim was found.</h1>
+}
+else
+{
+    for (int i = 0; i < Model.Count; i++)
+    {
+        <div class="form-group">
+            @(i + 1).
+            <label>Claim type : </label>
+            <label>@Model[i].ClaimType</label>
+            |
+            <label>Claim value : </label>
+            <label>@Model[i].ClaimValue</label>
+        </div>
+    }
+}
