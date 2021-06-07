@@ -31,6 +31,23 @@ namespace SampleIdentityMvc.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> AllUserClaims(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return NotFound();
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            var claims = (await _userManager.GetClaimsAsync(user))
+                .Select(c => new AllUserClaimsViewModel
+                {
+                    ClaimType = c.Type,
+                    ClaimValue = c.Value
+                }).ToList();
+
+            return View(claims);
+        }
+        
+        [HttpGet]
         public async Task<IActionResult> AddClaimToUser(string id)
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
