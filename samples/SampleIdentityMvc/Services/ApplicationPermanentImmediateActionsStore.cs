@@ -31,6 +31,8 @@ namespace SampleIdentityMvc.Services
             };
 
             _dbContext.ImmediateActionDatabaseModels.Add(model);
+
+            _dbContext.SaveChanges();
         }
 
         public async Task AddAsync(string key, DateTime expirationTime, ImmediateActionDataModel data, CancellationToken cancellationToken = default)
@@ -44,6 +46,8 @@ namespace SampleIdentityMvc.Services
             };
 
             await _dbContext.ImmediateActionDatabaseModels.AddAsync(model, cancellationToken);
+            
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
