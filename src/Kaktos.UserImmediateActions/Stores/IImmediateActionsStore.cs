@@ -13,8 +13,9 @@ namespace Kaktos.UserImmediateActions.Stores
         /// <param name="key">The unique key to store.</param>
         /// <param name="expirationTime">Expiration time relative to now.</param>
         /// <param name="data">The data to add to the underlying store.</param>
+        /// <param name="storeOnPermanentStoreAsWell">If set to true, will add the given data to the <see cref="IPermanentImmediateActionsStore"/> as well.</param>
         /// <returns><see cref="Task"/></returns>
-        void Add(string key, TimeSpan expirationTime, ImmediateActionDataModel data);
+        void Add(string key, TimeSpan expirationTime, ImmediateActionDataModel data, bool storeOnPermanentStoreAsWell = true);
 
         /// <summary>
         /// Adds given <paramref name="key"/> to the underlying store asynchronously.
@@ -22,9 +23,10 @@ namespace Kaktos.UserImmediateActions.Stores
         /// <param name="key">The unique key to store.</param>
         /// <param name="expirationTime">Expiration time relative to now.</param>
         /// <param name="data">The data to add to the underlying store.</param>
+        /// <param name="storeOnPermanentStoreAsWell">If set to true, will add the given data to the <see cref="IPermanentImmediateActionsStore"/> as well.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
         /// <returns><see cref="Task"/></returns>
-        Task AddAsync(string key, TimeSpan expirationTime, ImmediateActionDataModel data, CancellationToken cancellationToken = default);
+        Task AddAsync(string key, TimeSpan expirationTime, ImmediateActionDataModel data, bool storeOnPermanentStoreAsWell = true, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// If key is found in the underlying store, its <see cref="AddPurpose"/> will be returned, else will return <c>null</c>.
