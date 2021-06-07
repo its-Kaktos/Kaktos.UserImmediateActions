@@ -19,8 +19,4 @@
         <PackageReference Include="Quartz.AspNetCore" Version="3.3.2" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\Kaktos.UserImmediateActions\Kaktos.UserImmediateActions.csproj" />
-    </ItemGroup>
-
 </Project>
