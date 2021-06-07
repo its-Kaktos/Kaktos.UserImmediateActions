@@ -1,3 +1,4 @@
+using Kaktos.UserImmediateActions.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +28,9 @@ namespace SampleIdentityMvc
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserImmediateActions(); // Add default services to IoC Container
+            
             services.AddControllersWithViews();
         }
 
@@ -52,6 +55,9 @@ namespace SampleIdentityMvc
             app.UseRouting();
 
             app.UseAuthentication();
+
+            app.UseUserImmediateActions(); // Use this middleware between 'UseAuthentication' and 'UseAuthorization'
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
