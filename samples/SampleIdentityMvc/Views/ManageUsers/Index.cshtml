@@ -20,6 +20,10 @@ else
                 User Email : <b>@Model[i].Email</b>
             </div>
             <div class="card-footer">
+                <a asp-controller="ManageUsers" asp-action="AllUserClaims" asp-route-id="@Model[i].Id"
+                   class="btn btn-primary">
+                    Current claims
+                </a>
                 <a asp-controller="ManageUsers" asp-action="AddClaimToUser" asp-route-id="@Model[i].Id"
                    class="btn btn-primary">
                     Add claim
