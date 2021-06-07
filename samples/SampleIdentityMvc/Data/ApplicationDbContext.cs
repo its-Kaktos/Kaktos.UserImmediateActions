@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SampleIdentityMvc.Models;
 
 namespace SampleIdentityMvc.Data
 {
@@ -9,5 +10,7 @@ namespace SampleIdentityMvc.Data
             : base(options)
         {
         }
+
+        public DbSet<ImmediateActionDatabaseModel> ImmediateActionDatabaseModels { get; set; }
     }
 }
