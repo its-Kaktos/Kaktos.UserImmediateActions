@@ -9,12 +9,6 @@ namespace SampleIdentityMvc.Models
         public string UserId { get; set; }
         
         [Required]
-        public List<ClaimsViewModel> UserClaims { get; set; }
-    }
-    
-    public class ClaimsViewModel
-    {
-        [Required]
         public string ClaimType { get; set; }
         
         [Required]
