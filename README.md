@@ -2,13 +2,13 @@
 
 # A package to perform immediate log-out and refresh-sign-in on users.
 
-This project adds functionality on top of the asp.net core Identity package to support immediate log-out and refresh-sign-in.
+This project adds functionality on top of the asp.net core Identity package to enable immediate actions against users as admin. E.g: Immediate log-out or refresh-sign-in.
 
 ### [برای دیدن داکیومنت فارسی اینجا رو کلیک کنید](#یک-پکیج-برای-انجام-عملیات-های-log-out-و-refresh-signin-به-صورت-آنی-بر-روی-کاربران)
 
 ## Use cases :
 
-To immediately remove/add a role or a claim from/to a user as an admin, you can first remove the roles you want using `UserMnager` and `RoleManager` classes and then use the refresh-sign in functionality to
+To immediately remove/add a role or a claim from/to a user as an admin, you can first remove the roles you want using `UserManager` and `RoleManager` classes and then use the refresh-sign in functionality to
 immediately update the user cookie. To sign out a user from their account you can use the sign-out functionality to sign out a user immediately from their account.
 
 ## Quick access
@@ -246,7 +246,7 @@ If you like this project or you are using it in your application, please give it
 
 # یک پکیج برای انجام عملیات های log-out و refresh-signin به صورت آنی بر روی کاربران.
 
-این پکیج به سیستم asp.net core Identity قابلیت sign-out و refresh-signin به صورت آنی را اضافه خواهد کرد.
+این پکیج به سیستم asp.net core identity عملیات های sing-out و refresh-sign-in برای کاربران به صورت آنی توسط ادمین اضافه خواهد کرد.
 
 ## موارد استفاده :
 
