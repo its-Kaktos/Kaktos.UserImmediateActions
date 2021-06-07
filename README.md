@@ -6,6 +6,12 @@ This project adds functionality on top of the asp.net core Identity package to e
 
 ### [برای دیدن داکیومنت فارسی اینجا رو کلیک کنید](#یک-پکیج-برای-انجام-عملیات-های-log-out-و-refresh-signin-به-صورت-آنی-بر-روی-کاربران)
 
+## Get it on NuGet
+https://www.nuget.org/packages/Kaktos.UserImmediateActions/
+```
+PM> Install-Package Kaktos.UserImmediateActions -Version 1.0.0
+```
+
 ## Use cases :
 
 To immediately remove/add a role or a claim from/to a user as an admin, you can first remove the roles you want using `UserManager` and `RoleManager` classes and then use the refresh-sign in functionality to
@@ -13,6 +19,7 @@ immediately update the user cookie. To sign out a user from their account you ca
 
 ## Quick access
 
+- [Get it on NuGet](#get-it-on-nuget)
 - [Quick tutorial](#quick-tutorial)
 - [How to use IUserImmediateActionsService](#how-to-use-iuserimmediateactionsservice-)
 - [Services](#services)
@@ -248,6 +255,16 @@ If you like this project or you are using it in your application, please give it
 
 این پکیج به سیستم asp.net core identity عملیات های sing-out و refresh-sign-in برای کاربران به صورت آنی توسط ادمین اضافه خواهد کرد.
 
+## توسط NuGet نصب کنید
+<div dir="ltr">
+
+https://www.nuget.org/packages/Kaktos.UserImmediateActions/
+```
+PM> Install-Package Kaktos.UserImmediateActions -Version 1.0.0
+```
+
+</div>
+
 ## موارد استفاده :
 
 برای حذف کردن یک Role یا Claim به صورت آنی میتوان از refresh-signin استفاده کرد تا مقادیر آپدیت شده به صورت آنی در کوکی کاربر اعمال شوند. برای خارج کردن کاربر از حساب کاربری خود به
@@ -255,6 +272,7 @@ If you like this project or you are using it in your application, please give it
 
 ## دسترسی سریع
 
+- [توسط NuGet نصب کنید](#توسط-nuget-نصب-کنید)
 - [آموزش استفاده](#آموزش-استفاده)
 - [آموزش استفاده کامل از IUserImmediateActionsService](#آموزش-استفاده-کامل-از-iuserimmediateactionsservice-)
 - [سرویس ها](#سرویس-ها)
@@ -273,6 +291,7 @@ If you like this project or you are using it in your application, please give it
     - [اکستنشن متود AddUserImmediateActionsService](#اکستنشن-متود-AddUserImmediateActionsService-)
     - [اکستنشن متود AddCurrentUserWrapperService](#اکستنشن-متود-AddCurrentUserWrapperService-)
 - [نحوه کار این پکیج](#نحوه-کار-این-پکیج-)
+
 
 ## آموزش استفاده
 
