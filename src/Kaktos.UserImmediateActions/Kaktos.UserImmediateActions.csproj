@@ -9,7 +9,7 @@
         <RepositoryUrl>https://github.com/its-Kaktos/Kaktos.UserImmediateActions</RepositoryUrl>
         <PackageTags>identity</PackageTags>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageLicenseUrl>https://github.com/its-Kaktos/Kaktos.UserImmediateActions/blob/master/LICENSE.md</PackageLicenseUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
