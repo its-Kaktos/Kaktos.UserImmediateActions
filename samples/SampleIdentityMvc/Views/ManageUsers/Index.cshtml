@@ -1,5 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Manage users";
+﻿@model List<IndexViewModel>
+@{
+    ViewData["Title"] = "ManageUsers";
 }
 
-<h2>title</h2>
+
+@if (!Model.Any())
+{
+    <h1>No user was found.</h1>
+}
+else
+{
+    for (int i = 0; i < Model.Count; i++)
+    {
+        <div class="card mt-2">
+            <div class="card-header">
+                User Name : <b>@Model[i].UserName</b>
+            </div>
+            <div class="card-body">
+                User Email : <b>@Model[i].Email</b>
+            </div>
+            <div class="card-footer">
+                <!-- LINKS HERE -->
+            </div>
+        </div>
+    }
+}
