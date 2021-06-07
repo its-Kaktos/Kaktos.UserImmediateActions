@@ -188,6 +188,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
             _immediateActionsStoreMock.Verify(_ => _.AddAsync(It.IsAny<string>(),
                     It.IsAny<TimeSpan>(),
                     It.IsAny<ImmediateActionDataModel>(),
+                    It.Is<bool>(b => b),
                     It.IsAny<CancellationToken>()),
                 Times.Never);
         }
@@ -281,6 +282,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
                 _immediateActionsStoreMock.Verify(_ => _.AddAsync(It.Is<string>(s => s == userActionStoreUniqueKey),
                         It.Is<TimeSpan>(t => t == expirationTime),
                         It.Is<ImmediateActionDataModel>(model => model.Purpose == AddPurpose.UserCookieWasRefreshed),
+                        It.Is<bool>(b => b),
                         It.IsAny<CancellationToken>()),
                     Times.Once);
             }
@@ -293,6 +295,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
                         It.Is<TimeSpan>(t => t == expirationTime),
                         It.Is<ImmediateActionDataModel>(model =>
                             model.Purpose == AddPurpose.UserWasSignedOut),
+                        It.Is<bool>(b => b),
                         It.IsAny<CancellationToken>()),
                     Times.Once);
             }
