@@ -80,7 +80,8 @@ namespace SampleIdentityMvc.Controllers
 
                 if (result.Succeeded)
                 {
-                    // Only update user cookie when claims are added to their account.
+                    // Call this method when user claims are added successfully.
+                    // فقط زمانی این متود رو صدا بزنید که کلیم های کاربر با موفقیت اضافه شده اند.
                     await _userImmediateActionsService.RefreshCookieAsync(model.UserId);
                     return RedirectToAction("AddClaimToUser", new {id = model.UserId});
                 }
