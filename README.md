@@ -34,7 +34,7 @@ immediately update the user cookie. To sign out a user from their account you ca
 
 ## Quick tutorial
 
-1. To start after using the `AddIdentity` and setting up the identity services, use [`AddUserImmediateActions`](#adduserimmediateactions-) extension method to add all the [default services](#services) to IoC container.
+1. To start, after using the `AddIdentity` and setting up the identity services, use [`AddUserImmediateActions`](#adduserimmediateactions-) extension method to add all the [default services](#services) to IoC container.
 
 ```c#
 services.AddIdentity<IdentityUser, IdentityRole>() 
