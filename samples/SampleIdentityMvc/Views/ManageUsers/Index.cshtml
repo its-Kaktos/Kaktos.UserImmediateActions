@@ -28,6 +28,11 @@ else
                    class="btn btn-primary">
                     Add claim
                 </a>
+
+                <a asp-controller="ManageUsers" asp-action="AddClaimToUserWithOutImmediateUpdate" asp-route-id="@Model[i].Id"
+                   class="btn btn-primary">
+                    Add claim without immediate update
+                </a>
             </div>
         </div>
     }
