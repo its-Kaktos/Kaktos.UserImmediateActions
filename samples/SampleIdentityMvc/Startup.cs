@@ -1,5 +1,4 @@
 using Kaktos.UserImmediateActions.Extensions;
-using Kaktos.UserImmediateActions.Stores;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
