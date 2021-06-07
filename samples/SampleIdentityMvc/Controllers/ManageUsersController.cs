@@ -1,5 +1,9 @@
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SampleIdentityMvc.Models;
 
 namespace SampleIdentityMvc.Controllers
 {
@@ -12,9 +16,17 @@ namespace SampleIdentityMvc.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = await _userManager.Users
+                .Select(u => new IndexViewModel
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Email = u.Email
+                }).ToListAsync();
+            
+            return View(model);
         }
     }
 }
