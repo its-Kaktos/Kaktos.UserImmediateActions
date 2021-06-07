@@ -1,0 +1,26 @@
+﻿@model AddClaimViewModel
+@{
+    ViewData["Title"] = "Add claim to user";
+}
+
+<h1>Added claims will be added to user cookie immediatly.</h1>
+<h1 style="direction: rtl">کلیم اضافه شده به کوکی کاربر به صورت آنی اضافه خواهد شد.</h1>
+
+<form asp-controller="ManageUsers" asp-action="AddClaimToUser" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <div class="form-group">
+        <label asp-for="ClaimType"></label>
+        <input asp-for="ClaimType"/>
+        <span asp-validation-for="ClaimType"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ClaimValue"></label>
+        <input asp-for="ClaimValue"/>
+        <span asp-validation-for="ClaimValue"></span>
+    </div>
+
+    <input type="hidden" asp-for="@Model.UserId"/>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
