@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Kaktos.UserImmediateActions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,12 @@ namespace SampleIdentityMvc.Controllers
     public class ManageUsersController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IUserImmediateActionsService _userImmediateActionsService;
 
-        public ManageUsersController(UserManager<IdentityUser> userManager)
+        public ManageUsersController(UserManager<IdentityUser> userManager, IUserImmediateActionsService userImmediateActionsService)
         {
             _userManager = userManager;
+            _userImmediateActionsService = userImmediateActionsService;
         }
 
         public async Task<IActionResult> Index()
@@ -75,7 +78,12 @@ namespace SampleIdentityMvc.Controllers
                 
                 var result = await _userManager.AddClaimAsync(user, new Claim(model.ClaimType, model.ClaimValue));
 
-                if (result.Succeeded) return RedirectToAction("AddClaimToUser", new {id = model.UserId});
+                if (result.Succeeded)
+                {
+                    // Only update user cookie when claims are added to their account.
+                    await _userImmediateActionsService.RefreshCookieAsync(model.UserId);
+                    return RedirectToAction("AddClaimToUser", new {id = model.UserId});
+                }
 
                 foreach (var error in result.Errors)
                 {
