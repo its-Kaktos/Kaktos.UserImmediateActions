@@ -51,7 +51,7 @@ namespace Kaktos.UserImmediateActions.Stores
                     cancellationToken);
             }
 
-            Add(key, expirationTime, data);
+            _memoryCache.Set(key, data, expirationTime);
         }
 
         public ImmediateActionDataModel Get(string key)
