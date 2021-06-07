@@ -34,7 +34,10 @@ namespace SampleIdentityMvc.Services
                 
                 await _actionsStore.AddAsync(immediateAction.ActionKey,
                     expirationTime,
-                    data);
+                    data,
+                    // Because we just got the data from DB, we dont want to add it to DB again.
+                    // چون که اطلاعات رو تازه از دیتابیس گرفتیم، نمیخوایم باز اطلاعات به دیتابیس اضافه بشن
+                    false);
             }
         }
     }
