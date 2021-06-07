@@ -27,14 +27,14 @@ else
     <h2 style="direction: rtl">اگر شما با استفاده از اکشن متود 'AddClaimToUser' کلیم به خود اضافه کرده اید، نیاز دارید که یک بار از حساب خارج و دوباره وارد شوید تا تغییرات را ببینید</h2>
     
     <br/>
-    foreach (var Claim in User.Claims)
+    foreach (var claim in User.Claims)
     {
         <div class="card mt-2">
             <div class="card-header">
-                Claim type : <b>@Claim.Type</b>
+                Claim type : <b>@claim.Type</b>
             </div>
             <div class="card-body">
-                Claim value : <b>@Claim.Value</b>
+                Claim value : <b>@claim.Value</b>
             </div>
         </div>
     }
