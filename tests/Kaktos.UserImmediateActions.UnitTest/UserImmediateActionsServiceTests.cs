@@ -46,7 +46,10 @@ namespace Kaktos.UserImmediateActions.UnitTest
             var userId = Guid.NewGuid().ToString();
             var key = Guid.NewGuid() + userId;
             _userActionStoreKeyGeneratorMock.Setup(_ => _.GenerateKey(It.IsAny<string>())).Returns(key);
-            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<ImmediateActionDataModel>()));
+            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(),
+                It.IsAny<TimeSpan>(),
+                It.IsAny<ImmediateActionDataModel>(),
+                It.IsAny<bool>()));
 
             // Act
             _sut.RefreshCookie(userId);
@@ -58,7 +61,8 @@ namespace Kaktos.UserImmediateActions.UnitTest
                     It.Is<TimeSpan>(t => t == _expirationTimeForRefreshCookie),
                     It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.RefreshCookie &&
-                        model.AddedDate == _dateTimeNow)),
+                        model.AddedDate == _dateTimeNow),
+                    It.Is<bool>(b => b)),
                 Times.Once);
         }
 
@@ -76,7 +80,11 @@ namespace Kaktos.UserImmediateActions.UnitTest
             var userId = Guid.NewGuid().ToString();
             var key = Guid.NewGuid() + userId;
             _userActionStoreKeyGeneratorMock.Setup(_ => _.GenerateKey(It.IsAny<string>())).Returns(key);
-            _immediateActionsStoreMock.Setup(_ => _.AddAsync(It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<ImmediateActionDataModel>(), It.IsAny<CancellationToken>()));
+            _immediateActionsStoreMock.Setup(_ => _.AddAsync(It.IsAny<string>(),
+                It.IsAny<TimeSpan>(),
+                It.IsAny<ImmediateActionDataModel>(),
+                It.IsAny<bool>(),
+                It.IsAny<CancellationToken>()));
 
             // Act
             await _sut.RefreshCookieAsync(userId);
@@ -89,6 +97,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
                     It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.RefreshCookie &&
                         model.AddedDate == _dateTimeNow),
+                    It.Is<bool>(b => b),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
         }
@@ -107,7 +116,10 @@ namespace Kaktos.UserImmediateActions.UnitTest
             var userId = Guid.NewGuid().ToString();
             var key = Guid.NewGuid() + userId;
             _userActionStoreKeyGeneratorMock.Setup(_ => _.GenerateKey(It.IsAny<string>())).Returns(key);
-            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<ImmediateActionDataModel>()));
+            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(), 
+                It.IsAny<TimeSpan>(),
+                It.IsAny<ImmediateActionDataModel>(),
+                It.IsAny<bool>()));
 
             // Act
             _sut.SignOut(userId);
@@ -119,7 +131,8 @@ namespace Kaktos.UserImmediateActions.UnitTest
                     It.Is<TimeSpan>(t => t == _expirationTimeForSignOut),
                     It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.SignOut &&
-                        model.AddedDate == _dateTimeNow)),
+                        model.AddedDate == _dateTimeNow),
+                    It.Is<bool>(b => b)),
                 Times.Once);
         }
 
@@ -137,7 +150,11 @@ namespace Kaktos.UserImmediateActions.UnitTest
             var userId = Guid.NewGuid().ToString();
             var key = Guid.NewGuid() + userId;
             _userActionStoreKeyGeneratorMock.Setup(_ => _.GenerateKey(It.IsAny<string>())).Returns(key);
-            _immediateActionsStoreMock.Setup(_ => _.AddAsync(It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<ImmediateActionDataModel>(), It.IsAny<CancellationToken>()));
+            _immediateActionsStoreMock.Setup(_ => _.AddAsync(It.IsAny<string>(),
+                It.IsAny<TimeSpan>(),
+                It.IsAny<ImmediateActionDataModel>(),
+                It.IsAny<bool>(),
+                It.IsAny<CancellationToken>()));
 
             // Act
             await _sut.SignOutAsync(userId);
@@ -150,6 +167,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
                     It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.SignOut &&
                         model.AddedDate == _dateTimeNow),
+                    It.Is<bool>(b => b),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
         }
