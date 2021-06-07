@@ -38,8 +38,10 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
             Assert.Throws<ArgumentException>("key", () => _sut.Add("", _defaultExpireTimeSpan, data));
         }
 
-        [Fact]
-        public void Add_ShouldCall_Set()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Add_ShouldCall_Set(bool shouldCallPermanentStoreAsWell)
         {
             // Arrange
             var key = Guid.NewGuid().ToString();
@@ -50,7 +52,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
                 _.Set(It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<DistributedCacheEntryOptions>()));
 
             // Act
-            _sut.Add(key, _defaultExpireTimeSpan, data);
+            _sut.Add(key, _defaultExpireTimeSpan, data, shouldCallPermanentStoreAsWell);
 
             // Assert
             _distributedCacheMock.Verify(cache => cache
@@ -64,7 +66,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
                     It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.RefreshCookie &&
                         model.AddedDate == _dateTimeNow)),
-                Times.Once);
+                shouldCallPermanentStoreAsWell ? Times.Once : Times.Never);
         }
 
         [Fact]
@@ -75,8 +77,10 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
             await Assert.ThrowsAsync<ArgumentException>("key", () => _sut.AddAsync("", _defaultExpireTimeSpan, data));
         }
 
-        [Fact]
-        public async Task AddAsync_ShouldCall_SetAsync()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task AddAsync_ShouldCall_SetAsync(bool shouldCallPermanentStoreAsWell)
         {
             // Arrange
             var key = Guid.NewGuid().ToString();
@@ -87,7 +91,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
                 _.SetAsync(It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<DistributedCacheEntryOptions>(), It.IsAny<CancellationToken>()));
 
             // Act
-            await _sut.AddAsync(key, _defaultExpireTimeSpan, data);
+            await _sut.AddAsync(key, _defaultExpireTimeSpan, data, shouldCallPermanentStoreAsWell);
 
             // Assert
             _distributedCacheMock.Verify(cache => cache
@@ -103,7 +107,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
                         model.Purpose == AddPurpose.RefreshCookie &&
                         model.AddedDate == _dateTimeNow),
                     It.IsAny<CancellationToken>()),
-                Times.Once);
+                shouldCallPermanentStoreAsWell ? Times.Once : Times.Never);
         }
 
         [Fact]
