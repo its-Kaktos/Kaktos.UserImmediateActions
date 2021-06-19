@@ -37,6 +37,9 @@ namespace SampleIdentityMvc.Services
 
         public async Task AddAsync(string key, DateTime expirationTime, ImmediateActionDataModel data, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrEmpty(key)) throw new ArgumentException("Value cannot be null or empty.", nameof(key));
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             var model = new ImmediateActionDatabaseModel
             {
                 ActionKey = key,
@@ -46,7 +49,7 @@ namespace SampleIdentityMvc.Services
             };
 
             await _dbContext.ImmediateActionDatabaseModels.AddAsync(model, cancellationToken);
-            
+
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
