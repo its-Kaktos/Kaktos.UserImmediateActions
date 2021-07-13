@@ -9,7 +9,7 @@ This project adds functionality on top of the asp.net core Identity package to e
 ## Get it on NuGet
 https://www.nuget.org/packages/Kaktos.UserImmediateActions/
 ```
-PM> Install-Package Kaktos.UserImmediateActions -Version 2.0.0
+PM> Install-Package Kaktos.UserImmediateActions -Version 2.0.1
 ```
 
 ## Use cases :
@@ -260,7 +260,7 @@ If you like this project or you are using it in your application, please give it
 
 https://www.nuget.org/packages/Kaktos.UserImmediateActions/
 ```
-PM> Install-Package Kaktos.UserImmediateActions -Version 2.0.0
+PM> Install-Package Kaktos.UserImmediateActions -Version 2.0.1
 ```
 
 </div>
