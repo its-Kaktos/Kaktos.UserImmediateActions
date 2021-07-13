@@ -7,10 +7,22 @@
         <Description>Kaktos.UserImmediateActions adds functionality on top of the asp.net core Identity package to enable immediate actions against users as admin. E.g: Immediate log-out or refresh-sign-in.</Description>
         <Copyright>Copyright © Arman Hashempour 2021</Copyright>
         <RepositoryUrl>https://github.com/its-Kaktos/Kaktos.UserImmediateActions</RepositoryUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <PackageTags>identity</PackageTags>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageVersion>2.0.0</PackageVersion>
+        <PackageVersion>2.0.1</PackageVersion>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\Kaktos.UserImmediateActions.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\Kaktos.UserImmediateActions.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
