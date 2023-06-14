@@ -19,13 +19,13 @@ namespace Kaktos.UserImmediateActions
 
         public UserImmediateActionsService(IImmediateActionsStore immediateActionsStore,
             IUserActionStoreKeyGenerator userActionStoreKeyGenerator,
-            IDateTimeProvider dateTimeProvider,
             IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions,
             IOptions<SecurityStampValidatorOptions> securityStampValidatorOptions)
         {
             _immediateActionsStore = immediateActionsStore;
             _userActionStoreKeyGenerator = userActionStoreKeyGenerator;
-            _dateTimeProvider = dateTimeProvider;
+            // TODO: Find better fix for IDateTimeProvider being internal and can not be used on public ctor
+            _dateTimeProvider = new DateTimeProvider();
             var cookieOptions = cookieAuthenticationOptions?.Value ?? new CookieAuthenticationOptions();
             _expirationTimeForRefreshCookie = cookieOptions.ExpireTimeSpan;
             var securityStampOptions = securityStampValidatorOptions?.Value ?? new SecurityStampValidatorOptions();
