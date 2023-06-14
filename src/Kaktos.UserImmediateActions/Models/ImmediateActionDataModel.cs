@@ -4,7 +4,7 @@ namespace Kaktos.UserImmediateActions.Models
 {
     public class ImmediateActionDataModel
     {
-        public ImmediateActionDataModel(DateTime addedDate, AddPurpose purpose)
+        public ImmediateActionDataModel(DateTimeOffset addedDate, AddPurpose purpose)
         {
             AddedDate = addedDate;
             Purpose = purpose;
@@ -13,7 +13,7 @@ namespace Kaktos.UserImmediateActions.Models
         /// <summary>
         /// Gets the date of adding this model.
         /// </summary>
-        public DateTime AddedDate { get; }
+        public DateTimeOffset AddedDate { get; }
 
 
         /// <summary>
