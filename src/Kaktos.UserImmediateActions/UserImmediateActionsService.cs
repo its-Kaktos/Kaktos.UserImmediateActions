@@ -48,7 +48,7 @@ namespace Kaktos.UserImmediateActions
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
             await _immediateActionsStore.AddAsync(key,
                 _expirationTimeForRefreshCookie,
-                new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.RefreshCookie),
+                new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.RefreshCookie),
                 true,
                 cancellationToken);
         }
