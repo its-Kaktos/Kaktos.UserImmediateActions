@@ -14,6 +14,8 @@ namespace Kaktos.UserImmediateActions
     // ReSharper disable once ClassNeverInstantiated.Global
     public class UserImmediateActionsMiddleware
     {
+        // TODO: Find better fix for IDateTimeProvider being internal and can not be used on public ctor
+        private readonly IDateTimeProvider _dateTimeProvider = new DateTimeProvider();
         private readonly TimeSpan _expirationTimeForRefreshCookie;
         private readonly TimeSpan _expirationTimeForSignOut;
         private readonly ILogger<UserImmediateActionsMiddleware> _logger;
@@ -85,7 +87,7 @@ namespace Kaktos.UserImmediateActions
                         await currentUserWrapperService.RefreshSignInAsync(user);
                         await actionsStore.AddAsync(userActionStoreUniqueKey,
                             _expirationTimeForRefreshCookie,
-                            new ImmediateActionDataModel(DateTime.Now, AddPurpose.UserCookieWasRefreshed));
+                            new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.UserCookieWasRefreshed));
 
                         _logger.LogInformation("User cookie with userId '{UserId}' has been refreshed", userId);
                     }
@@ -99,7 +101,7 @@ namespace Kaktos.UserImmediateActions
                         await currentUserWrapperService.SignOutAsync();
                         await actionsStore.AddAsync(userActionStoreUniqueKey,
                             _expirationTimeForSignOut,
-                            new ImmediateActionDataModel(DateTime.Now, AddPurpose.UserWasSignedOut));
+                            new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.UserWasSignedOut));
 
                         _logger.LogInformation("User with userId '{UserId}' has been signed out", userId);
                     }
