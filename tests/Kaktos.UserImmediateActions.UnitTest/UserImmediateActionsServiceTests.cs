@@ -23,7 +23,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
 
         public UserImmediateActionsServiceTests()
         {
-            _dateTimeProviderMock.Setup(_ => _.Now()).Returns(_dateTimeNow);
+            _dateTimeProviderMock.Setup(_ => _.UtcNow()).Returns(_dateTimeNow);
 
             _sut = new UserImmediateActionsService(_immediateActionsStoreMock.Object,
                 _userActionStoreKeyGeneratorMock.Object,
@@ -116,7 +116,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
             var userId = Guid.NewGuid().ToString();
             var key = Guid.NewGuid() + userId;
             _userActionStoreKeyGeneratorMock.Setup(_ => _.GenerateKey(It.IsAny<string>())).Returns(key);
-            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(), 
+            _immediateActionsStoreMock.Setup(_ => _.Add(It.IsAny<string>(),
                 It.IsAny<TimeSpan>(),
                 It.IsAny<ImmediateActionDataModel>(),
                 It.IsAny<bool>()));

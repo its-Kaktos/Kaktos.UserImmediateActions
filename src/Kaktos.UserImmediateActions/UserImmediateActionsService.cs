@@ -11,18 +11,33 @@ namespace Kaktos.UserImmediateActions
 {
     public class UserImmediateActionsService : IUserImmediateActionsService
     {
-        // TODO: Find better fix for IDateTimeProvider being internal and can not be used on public ctor
-        private readonly IDateTimeProvider _dateTimeProvider = new DateTimeProvider();
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly TimeSpan _expirationTimeForRefreshCookie;
         private readonly TimeSpan _expirationTimeForSignOut;
         private readonly IImmediateActionsStore _immediateActionsStore;
         private readonly IUserActionStoreKeyGenerator _userActionStoreKeyGenerator;
+
+        internal UserImmediateActionsService(IImmediateActionsStore immediateActionsStore,
+            IUserActionStoreKeyGenerator userActionStoreKeyGenerator,
+            IDateTimeProvider dateTimeProvider,
+            IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions,
+            IOptions<SecurityStampValidatorOptions> securityStampValidatorOptions)
+        {
+            _dateTimeProvider = dateTimeProvider;
+            _immediateActionsStore = immediateActionsStore;
+            _userActionStoreKeyGenerator = userActionStoreKeyGenerator;
+            var cookieOptions = cookieAuthenticationOptions?.Value ?? new CookieAuthenticationOptions();
+            _expirationTimeForRefreshCookie = cookieOptions.ExpireTimeSpan;
+            var securityStampOptions = securityStampValidatorOptions?.Value ?? new SecurityStampValidatorOptions();
+            _expirationTimeForSignOut = securityStampOptions.ValidationInterval;
+        }
 
         public UserImmediateActionsService(IImmediateActionsStore immediateActionsStore,
             IUserActionStoreKeyGenerator userActionStoreKeyGenerator,
             IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions,
             IOptions<SecurityStampValidatorOptions> securityStampValidatorOptions)
         {
+            _dateTimeProvider = new DateTimeProvider();
             _immediateActionsStore = immediateActionsStore;
             _userActionStoreKeyGenerator = userActionStoreKeyGenerator;
             var cookieOptions = cookieAuthenticationOptions?.Value ?? new CookieAuthenticationOptions();
