@@ -9,13 +9,23 @@ namespace Kaktos.UserImmediateActions.Stores
 {
     public class DistributedCacheImmediateActionsStore : IImmediateActionsStore
     {
-        private readonly IDateTimeProvider _dateTimeProvider = new DateTimeProvider();
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IDistributedCache _cache;
         private readonly IPermanentImmediateActionsStore _permanentImmediateActionsStore;
+
+        internal DistributedCacheImmediateActionsStore(IDistributedCache cache,
+            IPermanentImmediateActionsStore permanentImmediateActionsStore,
+            IDateTimeProvider dateTimeProvider)
+        {
+            _dateTimeProvider = dateTimeProvider;
+            _cache = cache;
+            _permanentImmediateActionsStore = permanentImmediateActionsStore;
+        }
 
         public DistributedCacheImmediateActionsStore(IDistributedCache cache,
             IPermanentImmediateActionsStore permanentImmediateActionsStore)
         {
+            _dateTimeProvider = new DateTimeProvider();
             _cache = cache;
             _permanentImmediateActionsStore = permanentImmediateActionsStore;
         }

@@ -24,7 +24,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
 
         public DistributedCacheImmediateActionsStoreTests()
         {
-            _dateTimeProviderMock.Setup(_ => _.Now()).Returns(_dateTimeNow);
+            _dateTimeProviderMock.Setup(_ => _.UtcNow()).Returns(_dateTimeNow);
             _sut = new DistributedCacheImmediateActionsStore(_distributedCacheMock.Object,
                 _permanentImmediateActionsStoreMock.Object,
                 _dateTimeProviderMock.Object);
@@ -127,7 +127,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
             var expected = new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie);
             _distributedCacheMock.SetupSequence(_ => _.Get(It.IsAny<string>()))
                 .Returns(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(expected)))
-                .Returns((byte[]) null);
+                .Returns((byte[])null);
 
             // Act
             var actualValue = _sut.Get(key);
@@ -158,7 +158,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
             var expected = new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie);
             _distributedCacheMock.SetupSequence(_ => _.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(expected)))
-                .ReturnsAsync((byte[]) null);
+                .ReturnsAsync((byte[])null);
 
             // Act
             var actualValue = await _sut.GetAsync(key);
@@ -188,7 +188,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
             var key = Guid.NewGuid().ToString();
             _distributedCacheMock.SetupSequence(_ => _.Get(It.IsAny<string>()))
                 .Returns(Encoding.UTF8.GetBytes(""))
-                .Returns((byte[]) null);
+                .Returns((byte[])null);
 
             // Act
             var actualValue = _sut.Exists(key);
@@ -216,7 +216,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
             var key = Guid.NewGuid().ToString();
             _distributedCacheMock.SetupSequence(_ => _.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Encoding.UTF8.GetBytes(""))
-                .ReturnsAsync((byte[]) null);
+                .ReturnsAsync((byte[])null);
 
             // Act
             var actualValue = await _sut.ExistsAsync(key);
