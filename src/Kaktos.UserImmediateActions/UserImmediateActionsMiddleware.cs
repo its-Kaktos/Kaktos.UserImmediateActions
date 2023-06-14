@@ -14,18 +14,33 @@ namespace Kaktos.UserImmediateActions
     // ReSharper disable once ClassNeverInstantiated.Global
     public class UserImmediateActionsMiddleware
     {
-        // TODO: Find better fix for IDateTimeProvider being internal and can not be used on public ctor
-        private readonly IDateTimeProvider _dateTimeProvider = new DateTimeProvider();
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly TimeSpan _expirationTimeForRefreshCookie;
         private readonly TimeSpan _expirationTimeForSignOut;
         private readonly ILogger<UserImmediateActionsMiddleware> _logger;
         private readonly RequestDelegate _next;
+
+        internal UserImmediateActionsMiddleware(RequestDelegate next,
+            ILogger<UserImmediateActionsMiddleware> logger,
+            IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions,
+            IOptions<SecurityStampValidatorOptions> securityStampValidatorOptions,
+            IDateTimeProvider dateTimeProvider)
+        {
+            _dateTimeProvider = dateTimeProvider;
+            _next = next;
+            _logger = logger;
+            var cookieOptions = cookieAuthenticationOptions?.Value ?? new CookieAuthenticationOptions();
+            _expirationTimeForRefreshCookie = cookieOptions.ExpireTimeSpan;
+            var securityStampOptions = securityStampValidatorOptions?.Value ?? new SecurityStampValidatorOptions();
+            _expirationTimeForSignOut = securityStampOptions.ValidationInterval;
+        }
 
         public UserImmediateActionsMiddleware(RequestDelegate next,
             ILogger<UserImmediateActionsMiddleware> logger,
             IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions,
             IOptions<SecurityStampValidatorOptions> securityStampValidatorOptions)
         {
+            _dateTimeProvider = new DateTimeProvider();
             _next = next;
             _logger = logger;
             var cookieOptions = cookieAuthenticationOptions?.Value ?? new CookieAuthenticationOptions();
