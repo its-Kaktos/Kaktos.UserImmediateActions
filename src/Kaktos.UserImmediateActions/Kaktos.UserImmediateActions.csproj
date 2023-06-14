@@ -32,6 +32,10 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>$(MSBuildProjectName).UnitTest</_Parameter1>
         </AssemblyAttribute>
+        <!-- Make assembly usable for Moq, so Moq is able to instanciate objects of 'internal' classes -->
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+        </AssemblyAttribute>
 
         <None Include="../../README.md" Pack="true" PackagePath="/"/>
     </ItemGroup>
