@@ -15,7 +15,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
 {
     public class DistributedCacheImmediateActionsStoreTests
     {
-        private readonly DateTime _dateTimeNow = DateTime.Now;
+        private readonly DateTimeOffset _dateTimeOffsetUtcNow = DateTimeOffset.UtcNow;
         private readonly Mock<IDateTimeProvider> _dateTimeProviderMock = new();
         private readonly TimeSpan _defaultExpireTimeSpan = TimeSpan.FromDays(14);
         private readonly Mock<IDistributedCache> _distributedCacheMock = new();
@@ -24,7 +24,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
 
         public DistributedCacheImmediateActionsStoreTests()
         {
-            _dateTimeProviderMock.Setup(_ => _.Now()).Returns(_dateTimeNow);
+            _dateTimeProviderMock.Setup(_ => _.UtcNow()).Returns(_dateTimeOffsetUtcNow);
             _sut = new DistributedCacheImmediateActionsStore(_distributedCacheMock.Object,
                 _permanentImmediateActionsStoreMock.Object,
                 _dateTimeProviderMock.Object);
@@ -33,7 +33,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
         [Fact]
         public void Add_ShouldThrowArgumentException_WhenArgumentIsNull_OrEmptyString()
         {
-            var data = new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie);
+            var data = new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie);
             Assert.Throws<ArgumentNullException>("data", () => _sut.Add("key", _defaultExpireTimeSpan, null));
             Assert.Throws<ArgumentException>("key", () => _sut.Add(null, _defaultExpireTimeSpan, data));
             Assert.Throws<ArgumentException>("key", () => _sut.Add("", _defaultExpireTimeSpan, data));
@@ -46,7 +46,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
         {
             // Arrange
             var key = Guid.NewGuid().ToString();
-            var data = new ImmediateActionDataModel(_dateTimeNow, AddPurpose.RefreshCookie);
+            var data = new ImmediateActionDataModel(_dateTimeOffsetUtcNow, AddPurpose.RefreshCookie);
 
             var jsonData = JsonSerializer.Serialize(data);
             _distributedCacheMock.Setup(_ =>
@@ -63,17 +63,17 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
                 Times.Once);
             _permanentImmediateActionsStoreMock.Verify(store => store.Add(
                     It.Is<string>(s => s == key),
-                    It.Is<DateTime>(d => d == _dateTimeNow.Add(_defaultExpireTimeSpan)),
+                    It.Is<DateTimeOffset>(d => d == _dateTimeOffsetUtcNow.Add(_defaultExpireTimeSpan)),
                     It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.RefreshCookie &&
-                        model.AddedDate == _dateTimeNow)),
+                        model.AddedDate == _dateTimeOffsetUtcNow)),
                 shouldCallPermanentStoreAsWell ? Times.Once : Times.Never);
         }
 
         [Fact]
         public async Task AddAsync_ShouldThrowArgumentException_WhenArgumentIsNull_OrEmptyString()
         {
-            var data = new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie);
+            var data = new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie);
             await Assert.ThrowsAsync<ArgumentNullException>("data", () => _sut.AddAsync("key", _defaultExpireTimeSpan, null));
             await Assert.ThrowsAsync<ArgumentException>("key", () => _sut.AddAsync(null, _defaultExpireTimeSpan, data));
             await Assert.ThrowsAsync<ArgumentException>("key", () => _sut.AddAsync("", _defaultExpireTimeSpan, data));
@@ -86,7 +86,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
         {
             // Arrange
             var key = Guid.NewGuid().ToString();
-            var data = new ImmediateActionDataModel(_dateTimeNow, AddPurpose.RefreshCookie);
+            var data = new ImmediateActionDataModel(_dateTimeOffsetUtcNow, AddPurpose.RefreshCookie);
 
             var jsonData = JsonSerializer.Serialize(data);
             _distributedCacheMock.Setup(_ =>
@@ -104,10 +104,10 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
                 Times.Once);
             _permanentImmediateActionsStoreMock.Verify(store => store.AddAsync(
                     It.Is<string>(s => s == key),
-                    It.Is<DateTime>(d => d == _dateTimeNow.Add(_defaultExpireTimeSpan)),
+                    It.Is<DateTimeOffset>(d => d == _dateTimeOffsetUtcNow.Add(_defaultExpireTimeSpan)),
                     It.Is<ImmediateActionDataModel>(model =>
                         model.Purpose == AddPurpose.RefreshCookie &&
-                        model.AddedDate == _dateTimeNow),
+                        model.AddedDate == _dateTimeOffsetUtcNow),
                     It.IsAny<CancellationToken>()),
                 shouldCallPermanentStoreAsWell ? Times.Once : Times.Never);
         }
@@ -124,10 +124,10 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
         {
             // Arrange
             var key = Guid.NewGuid().ToString();
-            var expected = new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie);
+            var expected = new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie);
             _distributedCacheMock.SetupSequence(_ => _.Get(It.IsAny<string>()))
                 .Returns(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(expected)))
-                .Returns((byte[]) null);
+                .Returns((byte[])null);
 
             // Act
             var actualValue = _sut.Get(key);
@@ -155,10 +155,10 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
         {
             // Arrange
             var key = Guid.NewGuid().ToString();
-            var expected = new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie);
+            var expected = new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie);
             _distributedCacheMock.SetupSequence(_ => _.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(expected)))
-                .ReturnsAsync((byte[]) null);
+                .ReturnsAsync((byte[])null);
 
             // Act
             var actualValue = await _sut.GetAsync(key);
@@ -188,7 +188,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
             var key = Guid.NewGuid().ToString();
             _distributedCacheMock.SetupSequence(_ => _.Get(It.IsAny<string>()))
                 .Returns(Encoding.UTF8.GetBytes(""))
-                .Returns((byte[]) null);
+                .Returns((byte[])null);
 
             // Act
             var actualValue = _sut.Exists(key);
@@ -216,7 +216,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
             var key = Guid.NewGuid().ToString();
             _distributedCacheMock.SetupSequence(_ => _.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Encoding.UTF8.GetBytes(""))
-                .ReturnsAsync((byte[]) null);
+                .ReturnsAsync((byte[])null);
 
             // Act
             var actualValue = await _sut.ExistsAsync(key);

@@ -17,15 +17,29 @@ namespace Kaktos.UserImmediateActions
         private readonly IImmediateActionsStore _immediateActionsStore;
         private readonly IUserActionStoreKeyGenerator _userActionStoreKeyGenerator;
 
-        public UserImmediateActionsService(IImmediateActionsStore immediateActionsStore,
+        internal UserImmediateActionsService(IImmediateActionsStore immediateActionsStore,
             IUserActionStoreKeyGenerator userActionStoreKeyGenerator,
             IDateTimeProvider dateTimeProvider,
             IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions,
             IOptions<SecurityStampValidatorOptions> securityStampValidatorOptions)
         {
+            _dateTimeProvider = dateTimeProvider;
             _immediateActionsStore = immediateActionsStore;
             _userActionStoreKeyGenerator = userActionStoreKeyGenerator;
-            _dateTimeProvider = dateTimeProvider;
+            var cookieOptions = cookieAuthenticationOptions?.Value ?? new CookieAuthenticationOptions();
+            _expirationTimeForRefreshCookie = cookieOptions.ExpireTimeSpan;
+            var securityStampOptions = securityStampValidatorOptions?.Value ?? new SecurityStampValidatorOptions();
+            _expirationTimeForSignOut = securityStampOptions.ValidationInterval;
+        }
+
+        public UserImmediateActionsService(IImmediateActionsStore immediateActionsStore,
+            IUserActionStoreKeyGenerator userActionStoreKeyGenerator,
+            IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions,
+            IOptions<SecurityStampValidatorOptions> securityStampValidatorOptions)
+        {
+            _dateTimeProvider = new DateTimeProvider();
+            _immediateActionsStore = immediateActionsStore;
+            _userActionStoreKeyGenerator = userActionStoreKeyGenerator;
             var cookieOptions = cookieAuthenticationOptions?.Value ?? new CookieAuthenticationOptions();
             _expirationTimeForRefreshCookie = cookieOptions.ExpireTimeSpan;
             var securityStampOptions = securityStampValidatorOptions?.Value ?? new SecurityStampValidatorOptions();
@@ -38,7 +52,7 @@ namespace Kaktos.UserImmediateActions
 
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
 
-            _immediateActionsStore.Add(key, _expirationTimeForRefreshCookie, new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.RefreshCookie));
+            _immediateActionsStore.Add(key, _expirationTimeForRefreshCookie, new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.RefreshCookie));
         }
 
         public async Task RefreshCookieAsync(string userId, CancellationToken cancellationToken = default)
@@ -48,7 +62,7 @@ namespace Kaktos.UserImmediateActions
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
             await _immediateActionsStore.AddAsync(key,
                 _expirationTimeForRefreshCookie,
-                new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.RefreshCookie),
+                new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.RefreshCookie),
                 true,
                 cancellationToken);
         }
@@ -59,7 +73,7 @@ namespace Kaktos.UserImmediateActions
 
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
 
-            _immediateActionsStore.Add(key, _expirationTimeForSignOut, new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.SignOut));
+            _immediateActionsStore.Add(key, _expirationTimeForSignOut, new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.SignOut));
         }
 
         public async Task SignOutAsync(string userId, CancellationToken cancellationToken = default)
@@ -69,7 +83,7 @@ namespace Kaktos.UserImmediateActions
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
             await _immediateActionsStore.AddAsync(key,
                 _expirationTimeForSignOut,
-                new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.SignOut),
+                new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.SignOut),
                 true,
                 cancellationToken);
         }

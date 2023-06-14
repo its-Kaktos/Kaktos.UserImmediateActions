@@ -18,6 +18,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
 {
     public class UserImmediateActionsMiddlewareTests
     {
+        private readonly Mock<IDateTimeProvider> _dateTimeProviderMock = new();
         private readonly Mock<IImmediateActionsStore> _immediateActionsStoreMock = new();
         private readonly Mock<IUserActionStoreKeyGenerator> _userActionStoreKeyGeneratorMock = new();
         private readonly Mock<ICurrentUserWrapperService> _currentUserWrapperServiceMock = new();
@@ -32,7 +33,8 @@ namespace Kaktos.UserImmediateActions.UnitTest
             _sut = new UserImmediateActionsMiddleware(_ => Task.CompletedTask,
                 _loggerMock.Object,
                 new OptionsWrapper<CookieAuthenticationOptions>(new CookieAuthenticationOptions()),
-                new OptionsWrapper<SecurityStampValidatorOptions>(new SecurityStampValidatorOptions()));
+                new OptionsWrapper<SecurityStampValidatorOptions>(new SecurityStampValidatorOptions()),
+                _dateTimeProviderMock.Object);
         }
 
         [Fact]
@@ -93,12 +95,12 @@ namespace Kaktos.UserImmediateActions.UnitTest
             _httpContextMock.Setup(_ => _.Request.Headers)
                 .Returns(() => new HeaderDictionary
                 {
-                    {"User-Agent", userAgent}
+                    { "User-Agent", userAgent }
                 });
             _httpContextMock.Setup(_ => _.Connection.RemoteIpAddress)
                 .Returns(() => IPAddress.Parse(userIp));
             _immediateActionsStoreMock.Setup(_ => _.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((ImmediateActionDataModel) null);
+                .ReturnsAsync((ImmediateActionDataModel)null);
 
             // Act
             await _sut.InvokeAsync(_httpContextMock.Object,
@@ -153,7 +155,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
             _httpContextMock.Setup(_ => _.Request.Headers)
                 .Returns(() => new HeaderDictionary
                 {
-                    {"User-Agent", userAgent}
+                    { "User-Agent", userAgent }
                 });
             _httpContextMock.Setup(_ => _.Connection.RemoteIpAddress)
                 .Returns(() => IPAddress.Parse(userIp));
@@ -197,14 +199,14 @@ namespace Kaktos.UserImmediateActions.UnitTest
         {
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(1), AddPurpose.UserCookieWasRefreshed)
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow.AddSeconds(1), AddPurpose.UserCookieWasRefreshed)
             };
 
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.SignOut),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(1), AddPurpose.SignOut)
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.SignOut),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow.AddSeconds(1), AddPurpose.SignOut)
             };
         }
 
@@ -241,7 +243,7 @@ namespace Kaktos.UserImmediateActions.UnitTest
             _httpContextMock.Setup(_ => _.Request.Headers)
                 .Returns(() => new HeaderDictionary
                 {
-                    {"User-Agent", userAgent}
+                    { "User-Agent", userAgent }
                 });
             _httpContextMock.Setup(_ => _.Connection.RemoteIpAddress)
                 .Returns(() => IPAddress.Parse(userIp));
@@ -305,26 +307,26 @@ namespace Kaktos.UserImmediateActions.UnitTest
         {
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie),
                 null,
                 ExpirationTimeForRefreshCookie
             };
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(-1), AddPurpose.UserWasSignedOut),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow.AddSeconds(-1), AddPurpose.UserWasSignedOut),
                 ExpirationTimeForRefreshCookie
             };
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.SignOut),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.SignOut),
                 null,
                 ExpirationTimeForSignOut
             };
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.SignOut),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(-1), AddPurpose.UserCookieWasRefreshed),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.SignOut),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow.AddSeconds(-1), AddPurpose.UserCookieWasRefreshed),
                 ExpirationTimeForSignOut
             };
         }

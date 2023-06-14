@@ -9,17 +9,25 @@ namespace Kaktos.UserImmediateActions.Stores
 {
     public class DistributedCacheImmediateActionsStore : IImmediateActionsStore
     {
-        private readonly IDistributedCache _cache;
         private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IDistributedCache _cache;
         private readonly IPermanentImmediateActionsStore _permanentImmediateActionsStore;
 
-        public DistributedCacheImmediateActionsStore(IDistributedCache cache,
+        internal DistributedCacheImmediateActionsStore(IDistributedCache cache,
             IPermanentImmediateActionsStore permanentImmediateActionsStore,
             IDateTimeProvider dateTimeProvider)
         {
+            _dateTimeProvider = dateTimeProvider;
             _cache = cache;
             _permanentImmediateActionsStore = permanentImmediateActionsStore;
-            _dateTimeProvider = dateTimeProvider;
+        }
+
+        public DistributedCacheImmediateActionsStore(IDistributedCache cache,
+            IPermanentImmediateActionsStore permanentImmediateActionsStore)
+        {
+            _dateTimeProvider = new DateTimeProvider();
+            _cache = cache;
+            _permanentImmediateActionsStore = permanentImmediateActionsStore;
         }
 
         public void Add(string key, TimeSpan expirationTime, ImmediateActionDataModel data, bool storeOnPermanentStoreAsWell = true)
@@ -30,7 +38,7 @@ namespace Kaktos.UserImmediateActions.Stores
             if (storeOnPermanentStoreAsWell)
             {
                 _permanentImmediateActionsStore.Add(key,
-                    _dateTimeProvider.Now().Add(expirationTime),
+                    _dateTimeProvider.UtcNow().Add(expirationTime),
                     data);
             }
 
@@ -49,7 +57,7 @@ namespace Kaktos.UserImmediateActions.Stores
             if (storeOnPermanentStoreAsWell)
             {
                 await _permanentImmediateActionsStore.AddAsync(key,
-                    _dateTimeProvider.Now().Add(expirationTime),
+                    _dateTimeProvider.UtcNow().Add(expirationTime),
                     data,
                     cancellationToken);
             }

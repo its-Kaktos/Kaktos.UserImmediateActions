@@ -127,7 +127,7 @@ singed-out from their account on all their devices. if SecurityStamp is not upda
 
 ### `IDateTimeProvider` :
 
-This service is used internally to increase the testability of this package when using DateTime.Now.
+This service is used internally to increase the testability of this package when we need date and time.
 
 ### `IImmediateActionsStore` :
 
@@ -397,7 +397,7 @@ Async عملیات ذخیره سازی به صورت Async انجام خواهد
 
 ### ● - `IDateTimeProvider` :
 
-از این سرویس به صورت توکار برای بالا بردن قابلیت تست پذیری کدها استفاده میشود.
+از این سرویس به صورت توکار برای بالا بردن قابلیت تست پذیری کدهای مربوط به زمان استفاده میشود.
 
 ### ● - `IImmediateActionsStore` :
 
