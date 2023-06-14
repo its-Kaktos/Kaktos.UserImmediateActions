@@ -21,7 +21,7 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
 
         public MemoryCacheImmediateActionsStoreTests()
         {
-            _dateTimeProviderMock.Setup(_ => _.Now()).Returns(_dateTimeNow);
+            _dateTimeProviderMock.Setup(_ => _.UtcNow()).Returns(_dateTimeNow);
             _sut = new MemoryCacheImmediateActionsStore(_memoryCacheMock.Object,
                 _permanentImmediateActionsStoreMock.Object,
                 _dateTimeProviderMock.Object);
@@ -130,8 +130,8 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
                 out expected), Times.Exactly(2));
 
             actualValue.Should().NotBeNull();
-            Assert.Equal(((ImmediateActionDataModel) expected).AddedDate, actualValue.AddedDate);
-            Assert.Equal(((ImmediateActionDataModel) expected).Purpose, actualValue.Purpose);
+            Assert.Equal(((ImmediateActionDataModel)expected).AddedDate, actualValue.AddedDate);
+            Assert.Equal(((ImmediateActionDataModel)expected).Purpose, actualValue.Purpose);
             actualValue2.Should().BeNull();
         }
 
@@ -161,8 +161,8 @@ namespace Kaktos.UserImmediateActions.UnitTest.Stores
                 out expected), Times.Exactly(2));
 
             actualValue.Should().NotBeNull();
-            Assert.Equal(((ImmediateActionDataModel) expected).AddedDate, actualValue.AddedDate);
-            Assert.Equal(((ImmediateActionDataModel) expected).Purpose, actualValue.Purpose);
+            Assert.Equal(((ImmediateActionDataModel)expected).AddedDate, actualValue.AddedDate);
+            Assert.Equal(((ImmediateActionDataModel)expected).Purpose, actualValue.Purpose);
             actualValue2.Should().BeNull();
         }
 
