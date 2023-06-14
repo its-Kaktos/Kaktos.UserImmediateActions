@@ -199,14 +199,14 @@ namespace Kaktos.UserImmediateActions.UnitTest
         {
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(1), AddPurpose.UserCookieWasRefreshed)
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow.AddSeconds(1), AddPurpose.UserCookieWasRefreshed)
             };
 
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.SignOut),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(1), AddPurpose.SignOut)
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.SignOut),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow.AddSeconds(1), AddPurpose.SignOut)
             };
         }
 
@@ -307,26 +307,26 @@ namespace Kaktos.UserImmediateActions.UnitTest
         {
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie),
                 null,
                 ExpirationTimeForRefreshCookie
             };
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.RefreshCookie),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(-1), AddPurpose.UserWasSignedOut),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.RefreshCookie),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow.AddSeconds(-1), AddPurpose.UserWasSignedOut),
                 ExpirationTimeForRefreshCookie
             };
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.SignOut),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.SignOut),
                 null,
                 ExpirationTimeForSignOut
             };
             yield return new object[]
             {
-                new ImmediateActionDataModel(DateTime.Now, AddPurpose.SignOut),
-                new ImmediateActionDataModel(DateTime.Now.AddSeconds(-1), AddPurpose.UserCookieWasRefreshed),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow, AddPurpose.SignOut),
+                new ImmediateActionDataModel(DateTimeOffset.UtcNow.AddSeconds(-1), AddPurpose.UserCookieWasRefreshed),
                 ExpirationTimeForSignOut
             };
         }
