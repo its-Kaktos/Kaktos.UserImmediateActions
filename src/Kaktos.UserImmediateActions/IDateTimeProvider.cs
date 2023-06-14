@@ -2,7 +2,7 @@ using System;
 
 namespace Kaktos.UserImmediateActions
 {
-    internal interface IDateTimeProvider
+    public interface IDateTimeProvider
     {
         DateTimeOffset UtcNow();
     }
