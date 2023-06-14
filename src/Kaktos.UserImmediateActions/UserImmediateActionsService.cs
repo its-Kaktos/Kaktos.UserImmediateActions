@@ -38,7 +38,7 @@ namespace Kaktos.UserImmediateActions
 
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
 
-            _immediateActionsStore.Add(key, _expirationTimeForRefreshCookie, new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.RefreshCookie));
+            _immediateActionsStore.Add(key, _expirationTimeForRefreshCookie, new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.RefreshCookie));
         }
 
         public async Task RefreshCookieAsync(string userId, CancellationToken cancellationToken = default)
@@ -48,7 +48,7 @@ namespace Kaktos.UserImmediateActions
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
             await _immediateActionsStore.AddAsync(key,
                 _expirationTimeForRefreshCookie,
-                new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.RefreshCookie),
+                new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.RefreshCookie),
                 true,
                 cancellationToken);
         }
@@ -59,7 +59,7 @@ namespace Kaktos.UserImmediateActions
 
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
 
-            _immediateActionsStore.Add(key, _expirationTimeForSignOut, new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.SignOut));
+            _immediateActionsStore.Add(key, _expirationTimeForSignOut, new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.SignOut));
         }
 
         public async Task SignOutAsync(string userId, CancellationToken cancellationToken = default)
@@ -69,7 +69,7 @@ namespace Kaktos.UserImmediateActions
             var key = _userActionStoreKeyGenerator.GenerateKey(userId);
             await _immediateActionsStore.AddAsync(key,
                 _expirationTimeForSignOut,
-                new ImmediateActionDataModel(_dateTimeProvider.Now(), AddPurpose.SignOut),
+                new ImmediateActionDataModel(_dateTimeProvider.UtcNow(), AddPurpose.SignOut),
                 true,
                 cancellationToken);
         }
