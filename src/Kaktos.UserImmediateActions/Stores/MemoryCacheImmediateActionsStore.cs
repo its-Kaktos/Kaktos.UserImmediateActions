@@ -8,17 +8,15 @@ namespace Kaktos.UserImmediateActions.Stores
 {
     public class MemoryCacheImmediateActionsStore : IImmediateActionsStore
     {
-        private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IDateTimeProvider _dateTimeProvider = new DateTimeProvider();
         private readonly IMemoryCache _memoryCache;
         private readonly IPermanentImmediateActionsStore _permanentImmediateActionsStore;
 
         public MemoryCacheImmediateActionsStore(IMemoryCache memoryCache,
-            IPermanentImmediateActionsStore permanentImmediateActionsStore,
-            IDateTimeProvider dateTimeProvider)
+            IPermanentImmediateActionsStore permanentImmediateActionsStore)
         {
             _memoryCache = memoryCache;
             _permanentImmediateActionsStore = permanentImmediateActionsStore;
-            _dateTimeProvider = dateTimeProvider;
         }
 
         public void Add(string key, TimeSpan expirationTime, ImmediateActionDataModel data, bool storeOnPermanentStoreAsWell = true)
@@ -29,7 +27,7 @@ namespace Kaktos.UserImmediateActions.Stores
             if (storeOnPermanentStoreAsWell)
             {
                 _permanentImmediateActionsStore.Add(key,
-                    _dateTimeProvider.Now().Add(expirationTime),
+                    _dateTimeProvider.UtcNow().Add(expirationTime),
                     data);
             }
 
@@ -48,7 +46,7 @@ namespace Kaktos.UserImmediateActions.Stores
             if (storeOnPermanentStoreAsWell)
             {
                 await _permanentImmediateActionsStore.AddAsync(key,
-                    _dateTimeProvider.Now().Add(expirationTime),
+                    _dateTimeProvider.UtcNow().Add(expirationTime),
                     data,
                     cancellationToken);
             }
