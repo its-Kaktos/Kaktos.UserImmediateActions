@@ -8,7 +8,7 @@ namespace Kaktos.UserImmediateActions.Stores
     public interface IImmediateActionsStore
     {
         /// <summary>
-        /// Adds given <paramref name="key"/> to the underlying store.
+        /// Adds the given <paramref name="key"/> and <paramref name="data"/> to the underlying store.
         /// </summary>
         /// <param name="key">The unique key to store.</param>
         /// <param name="expirationTime">Expiration time relative to now.</param>
@@ -18,7 +18,7 @@ namespace Kaktos.UserImmediateActions.Stores
         void Add(string key, TimeSpan expirationTime, ImmediateActionDataModel data, bool storeOnPermanentStoreAsWell = true);
 
         /// <summary>
-        /// Adds given <paramref name="key"/> to the underlying store asynchronously.
+        /// Adds the given <paramref name="key"/> and <paramref name="data"/> to the underlying store asynchronously.
         /// </summary>
         /// <param name="key">The unique key to store.</param>
         /// <param name="expirationTime">Expiration time relative to now.</param>
@@ -29,14 +29,14 @@ namespace Kaktos.UserImmediateActions.Stores
         Task AddAsync(string key, TimeSpan expirationTime, ImmediateActionDataModel data, bool storeOnPermanentStoreAsWell = true, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// If key is found in the underlying store, its <see cref="AddPurpose"/> will be returned, else will return <c>null</c>.
+        /// Searches for the data with the given <paramref name="key"/>
         /// </summary>
         /// <param name="key">The key you want to check.</param>
         /// <returns>The <see cref="AddPurpose"/> if <paramref name="key"/> is found, else will return <c>null</c>.</returns>
         ImmediateActionDataModel Get(string key);
 
         /// <summary>
-        /// If key is found in the underlying store, its <see cref="AddPurpose"/> will be returned, else will return <c>null</c>.
+        /// Searches for the data with the given <paramref name="key"/> Asynchronously
         /// </summary>
         /// <param name="key">The key you want to check.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
