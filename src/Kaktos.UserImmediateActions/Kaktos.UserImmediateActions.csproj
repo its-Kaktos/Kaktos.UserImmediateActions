@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <Title>User immediate actions</Title>
@@ -7,37 +6,33 @@
         <Description>Kaktos.UserImmediateActions adds functionality on top of the asp.net core Identity package to enable immediate actions against users as admin. E.g: Immediate log-out or refresh-sign-in.</Description>
         <Copyright>Copyright © Arman Hashempour 2021</Copyright>
         <RepositoryUrl>https://github.com/its-Kaktos/Kaktos.UserImmediateActions</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <PackageTags>identity</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>identity, user, kaktos, asp.net core</PackageTags>
+        <PackageId>Kaktos.UserImmediateActions</PackageId>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageVersion>2.0.1</PackageVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\Kaktos.UserImmediateActions.xml</DocumentationFile>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\Kaktos.UserImmediateActions.xml</DocumentationFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.0" />
-        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.0" />
-        <PackageReference Include="System.Text.Json" Version="5.0.2" />
-    </ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.*"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.*"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.*"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.*"/>
+        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.*"/>
+        <PackageReference Include="System.Text.Json" Version="5.*"/>
 
-    <!-- Making internal visible to UnitTest project -->
-    <ItemGroup>
+        <!-- Making internal visible to UnitTest project -->
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>$(MSBuildProjectName).UnitTest</_Parameter1>
         </AssemblyAttribute>
+
+        <None Include="../../README.md" Pack="true" PackagePath="/"/>
     </ItemGroup>
 </Project>

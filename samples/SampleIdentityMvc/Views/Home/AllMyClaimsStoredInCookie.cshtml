@@ -1,11 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> _signInManager
+@inject SignInManager<IdentityUser> SignInManager
 @{
     ViewData["Title"] = "All my claims stored in cookie";
 }
 
 
-@if (!_signInManager.IsSignedIn(User))
+@if (!SignInManager.IsSignedIn(User))
 {
     <h1>You are not logged into your account.</h1>
     <h1>شما وارد حساب کاربری خود نشده اید.</h1>
@@ -14,9 +14,9 @@ else if (!User.Claims.Any())
 {
     <h1>No claim was found, make sure you have some claims in DB.</h1>
     <h2>If you added claim to your account using 'AddClaimToUserWithOutImmediateUpdate', then you need to logout and log back in to see the changes.</h2>
-    
+
     <br/>
-    
+
     <h1 style="direction: rtl">هیچ کلیمی یافت نشد، مطمئن شوید در دیتابیس کلیم ثبت کرده اید.</h1>
     <h2 style="direction: rtl">اگر شما با استفاده از اکشن متود 'AddClaimToUser' کلیم به خود اضافه کرده اید، نیاز دارید که یک بار از حساب خارج و دوباره وارد شوید تا تغییرات را ببینید</h2>
 }
@@ -25,7 +25,7 @@ else
     <h2>If you added claim to your account using 'AddClaimToUserWithOutImmediateUpdate' endpoint, then you need to logout and log back in to see the changes.</h2>
     <br/>
     <h2 style="direction: rtl">اگر شما با استفاده از اکشن متود 'AddClaimToUser' کلیم به خود اضافه کرده اید، نیاز دارید که یک بار از حساب خارج و دوباره وارد شوید تا تغییرات را ببینید</h2>
-    
+
     <br/>
     foreach (var claim in User.Claims)
     {
