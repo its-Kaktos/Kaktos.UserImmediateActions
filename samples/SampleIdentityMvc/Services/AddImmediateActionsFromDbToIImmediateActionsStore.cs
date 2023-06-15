@@ -24,14 +24,14 @@ namespace SampleIdentityMvc.Services
             if (!await _dbContext.ImmediateActionDatabaseModels.AnyAsync()) return;
 
             var nonExpiredImmediateActions = await _dbContext.ImmediateActionDatabaseModels
-                .Where(i => i.ExpirationTime > DateTime.Now)
+                .Where(i => i.ExpirationTimeUtc > DateTimeOffset.UtcNow)
                 .ToListAsync();
 
             foreach (var immediateAction in nonExpiredImmediateActions)
             {
-                var expirationTime = immediateAction.ExpirationTime - DateTime.Now;
-                var data = new ImmediateActionDataModel(immediateAction.AddedDate, immediateAction.Purpose);
-                
+                var expirationTime = immediateAction.ExpirationTimeUtc - DateTimeOffset.UtcNow;
+                var data = new ImmediateActionDataModel(immediateAction.AddedDateUtc, immediateAction.Purpose);
+
                 await _actionsStore.AddAsync(immediateAction.ActionKey,
                     expirationTime,
                     data,
