@@ -22,12 +22,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.*"/>
-        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.*"/>
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.*"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.*"/>
-        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.*"/>
-        <PackageReference Include="System.Text.Json" Version="5.*"/>
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.7"/>
+        <PackageReference Include="System.Text.Json" Version="7.0.3"/>
 
         <!-- Making internal visible to UnitTest project -->
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
