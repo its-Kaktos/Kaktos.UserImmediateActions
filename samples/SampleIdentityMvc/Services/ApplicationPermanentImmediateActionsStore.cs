@@ -17,7 +17,7 @@ namespace SampleIdentityMvc.Services
             _dbContext = dbContext;
         }
 
-        public void Add(string key, DateTime expirationTime, ImmediateActionDataModel data)
+        public void Add(string key, DateTimeOffset expirationTimeUtc, ImmediateActionDataModel data)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("Value cannot be null or empty.", nameof(key));
             if (data == null) throw new ArgumentNullException(nameof(data));
@@ -25,9 +25,9 @@ namespace SampleIdentityMvc.Services
             var model = new ImmediateActionDatabaseModel
             {
                 ActionKey = key,
-                ExpirationTime = expirationTime,
+                ExpirationTimeUtc = expirationTimeUtc,
                 Purpose = data.Purpose,
-                AddedDate = data.AddedDate
+                AddedDateUtc = data.AddedDate
             };
 
             _dbContext.ImmediateActionDatabaseModels.Add(model);
@@ -35,7 +35,7 @@ namespace SampleIdentityMvc.Services
             _dbContext.SaveChanges();
         }
 
-        public async Task AddAsync(string key, DateTime expirationTime, ImmediateActionDataModel data, CancellationToken cancellationToken = default)
+        public async Task AddAsync(string key, DateTimeOffset expirationTimeUtc, ImmediateActionDataModel data, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("Value cannot be null or empty.", nameof(key));
             if (data == null) throw new ArgumentNullException(nameof(data));
@@ -43,9 +43,9 @@ namespace SampleIdentityMvc.Services
             var model = new ImmediateActionDatabaseModel
             {
                 ActionKey = key,
-                ExpirationTime = expirationTime,
+                ExpirationTimeUtc = expirationTimeUtc,
                 Purpose = data.Purpose,
-                AddedDate = data.AddedDate
+                AddedDateUtc = data.AddedDate
             };
 
             await _dbContext.ImmediateActionDatabaseModels.AddAsync(model, cancellationToken);
