@@ -32,7 +32,7 @@ namespace SampleIdentityMvc.Quartz.Jobs
             if (await dbContext.ImmediateActionDatabaseModels.AnyAsync())
             {
                 var expiredImmediateActions = await dbContext.ImmediateActionDatabaseModels
-                    .Where(i => i.ExpirationTime < DateTime.Now)
+                    .Where(i => i.ExpirationTimeUtc < DateTimeOffset.UtcNow)
                     .ToListAsync();
 
                 dbContext.RemoveRange(expiredImmediateActions);
