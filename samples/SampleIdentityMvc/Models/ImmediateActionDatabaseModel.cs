@@ -6,14 +6,12 @@ namespace SampleIdentityMvc.Models
 {
     public class ImmediateActionDatabaseModel
     {
-        [Key]
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
 
-        [Required]
-        public string ActionKey { get; set; }
+        [Required] public string ActionKey { get; set; }
 
-        public DateTime AddedDate { get; set; }
-        public DateTime ExpirationTime { get; set; }
+        public DateTimeOffset AddedDateUtc { get; set; }
+        public DateTimeOffset ExpirationTimeUtc { get; set; }
         public AddPurpose Purpose { get; set; }
     }
 }
