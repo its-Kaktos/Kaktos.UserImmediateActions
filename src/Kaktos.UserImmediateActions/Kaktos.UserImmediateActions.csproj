@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <Title>User immediate actions</Title>
         <Authors>Arman Hashempour</Authors>
         <Description>Kaktos.UserImmediateActions adds functionality on top of the asp.net core Identity package to enable immediate actions against users as admin. E.g: Immediate log-out or refresh-sign-in.</Description>
@@ -13,20 +13,21 @@
         <PackageId>Kaktos.UserImmediateActions</PackageId>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageVersion>2.0.1</PackageVersion>
+        <PackageVersion>3.0.0</PackageVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <LangVersion>default</LangVersion>
+        <FileVersion>3.0.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.*"/>
-        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.*"/>
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.*"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.*"/>
-        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.*"/>
-        <PackageReference Include="System.Text.Json" Version="5.*"/>
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.7"/>
+        <PackageReference Include="System.Text.Json" Version="7.0.3"/>
 
         <!-- Making internal visible to UnitTest project -->
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
