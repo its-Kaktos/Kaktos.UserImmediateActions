@@ -13,12 +13,12 @@
         <PackageId>Kaktos.UserImmediateActions</PackageId>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageVersion>2.0.1</PackageVersion>
+        <PackageVersion>3.0.0</PackageVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <LangVersion>default</LangVersion>
+        <FileVersion>3.0.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
