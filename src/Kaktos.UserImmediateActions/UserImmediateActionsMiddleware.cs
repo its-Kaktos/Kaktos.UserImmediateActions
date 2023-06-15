@@ -123,7 +123,9 @@ namespace Kaktos.UserImmediateActions
 
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(actionToPreformOnUser),
+                        $"The action to preform on use either is something that is not possible E.g: AddPurpose.UserWasSignedOut" +
+                        $" or the action is out of the range of the enum");
             }
         }
     }
