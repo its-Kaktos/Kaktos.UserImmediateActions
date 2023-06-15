@@ -20,6 +20,7 @@ namespace Kaktos.UserImmediateActions
         private readonly ILogger<UserImmediateActionsMiddleware> _logger;
         private readonly RequestDelegate _next;
 
+        // Only Used for unit testing
         internal UserImmediateActionsMiddleware(RequestDelegate next,
             ILogger<UserImmediateActionsMiddleware> logger,
             IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions,
